@@ -8,21 +8,46 @@ gcc.exe -o 2_data_structures.exe -w main.c stack.c -> -w will hide the warning m
 
 int main()
 {
-    struct Stack stack1, stack2, stack3, stack4, stack5;  
-    struct StackList list; 
+    struct Stack* stack[5];  
+    struct StackWrapper* wrapper; 
     //Initialization
-    InitializeStack(1, &stack1); 
-    InitializeStack(2, &stack2); 
-    InitializeStack(3, &stack3); 
-    InitializeStack(4, &stack4); 
-    InitializeStack(5, &stack5); 
-    InitializeStackList(&list); 
+    for(int i=0; i<5; i++)
+    {
+        stack[i] = InitializeStack(i); 
+    }
 
+    for(int i = 0; i < 5; i++)
+    {
+        if(stack[i])
+        {
+            PrintStack(stack[i]); 
+        }
+        else
+        {
+            printf("Stack %d is empty", i); 
+        }
+    }
+    
+    wrapper = InitializeStackWrapper(); 
+    printf("Wrapper initialized\n"); 
+    
     //Actions
-    Push(&list, &stack1); 
-    Push(&list, &stack2); 
-    Push(&list, &stack3); 
-    Push(&list, &stack4); 
-    Push(&list, &stack5);
-    Print(&list);  
+    Push(wrapper, stack[0]); 
+    Push(wrapper, stack[1]); 
+    Push(wrapper, stack[2]); 
+    Push(wrapper, stack[3]); 
+    struct Stack* popped = Pop(wrapper); 
+    Push(wrapper, stack[4]);
+    
+    PrintWrapper(wrapper); 
+
+    FreeWrapper(wrapper); 
+
+    for(int i=0; i<5; i++)
+    {
+        Free(stack[i]);  
+    }
+ 
+    return 0; 
 }
+
