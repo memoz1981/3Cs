@@ -1,6 +1,4 @@
-/*
-HEADER FILE FOR STACK (AND ASSOCIATED WRAPPER STACKWRAPPER)
-*/
+/* HEADER FILE FOR STACK (AND ASSOCIATED WRAPPER STACKWRAPPER) */
 
 //Define the stack
 typedef struct Stack
@@ -17,21 +15,21 @@ typedef struct StackWrapper
     int count; 
 };
 
-/*Stack initialization and freeing the memory*/
+/* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct Stack* InitializeStack(int value);
 void Free(struct Stack* stack); 
 
-/*Stack wrapper initialization and freeing the memory*/
 struct StackWrapper* InitializeStackWrapper(void); 
 void FreeWrapper(struct StackWrapper* wrapper); 
 
-/*Stack actions*/
+/* STACK FUNCTION IMPLEMENTATIONS */
 void Push(struct StackWrapper* wrapper, struct Stack* stack);
 struct Stack* Pop(struct StackWrapper* wrapper); 
+struct Stack* Peek(struct StackWrapper* wrapper); 
 
 int Size(struct StackWrapper* wrapper); 
-struct Stack* Peek(struct StackWrapper* wrapper); 
 int isEmpty(struct StackWrapper* wrapper); 
 
+/* PRINT FUNCTIONS */
 void PrintWrapper(struct StackWrapper* wrapper); 
 void PrintStack(struct Stack* stack); 
