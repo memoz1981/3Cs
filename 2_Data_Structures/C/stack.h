@@ -33,3 +33,12 @@ int isEmpty(struct StackWrapper* wrapper);
 /* PRINT FUNCTIONS */
 void PrintWrapper(struct StackWrapper* wrapper); 
 void PrintStack(struct Stack* stack); 
+
+/* STACK DEMO */
+void run_stack_test(void);
+
+/*
+STACK DEMO - Behind the Hoods
+
+1) 
+*/
