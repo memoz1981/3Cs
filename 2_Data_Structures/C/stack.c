@@ -85,3 +85,27 @@ void PrintStack(struct Stack* stack)
     printf("\nStack value %d and address %p and next value is %d\n", stack->value, (void*)(&stack), nextvalue); 
 }
 
+int Size(struct StackWrapper* wrapper)
+{
+    if(!wrapper)
+        return -1; 
+
+    return wrapper->count; 
+}
+
+struct Stack* Peek(struct StackWrapper* wrapper)
+{
+    if(*(wrapper->top) == NULL)
+        return NULL; 
+
+    return *(wrapper->top); 
+}
+
+int isEmpty(struct StackWrapper* wrapper)
+{
+    if(!wrapper)
+        return -1; 
+
+    return wrapper->count == 0; 
+}
+
