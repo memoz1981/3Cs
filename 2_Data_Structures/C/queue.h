@@ -23,12 +23,11 @@ void FreeQueueWrapper(struct QueueWrapper* wrapper);
 
 /* QUEUE FUNCTION IMPLEMENTATIONS */
 void Enqueue(struct QueueWrapper* wrapper, struct Queue* item);
-void Enqueue(struct QueueWrapper* wrapper, int value); //will try overloading
 struct Queue* Dequeue(struct QueueWrapper* wrapper); 
-struct Queue* Peek(struct QueueWrapper* wrapper); 
+struct Queue* PeekQueue(struct QueueWrapper* wrapper); 
 
-int Size(struct QueueWrapper* wrapper); 
-int isEmpty(struct QueueWrapper* wrapper); 
+int QueueSize(struct QueueWrapper* wrapper); 
+int isQueueEmpty(struct QueueWrapper* wrapper); 
 
 /* PRINT FUNCTIONS */
 void PrintSingleQueueItem(struct Queue* item); 

@@ -88,7 +88,7 @@ struct Queue* Dequeue(struct QueueWrapper* wrapper)
     return lastElement; 
 }
 
-struct Queue* Peek(struct QueueWrapper* wrapper)
+struct Queue* PeekQueue(struct QueueWrapper* wrapper)
 {
     if(wrapper->head == NULL)
         return NULL; 
@@ -101,12 +101,12 @@ struct Queue* Peek(struct QueueWrapper* wrapper)
     return iterator; 
 }
 
-int Size(struct QueueWrapper* wrapper)
+int QueueSize(struct QueueWrapper* wrapper)
 {
     return wrapper->size; 
 }
 
-int isEmpty(struct QueueWrapper* wrapper)
+int isQueueEmpty(struct QueueWrapper* wrapper)
 {
     return wrapper->size == 0; 
 }
