@@ -7,22 +7,32 @@ typedef struct Queue
     struct Queue* next;
 };
 
+//Define the queue wrapper - this is required when the reference to head needs to be destructed
+typedef struct QueueWrapper
+{
+    struct Queue* head;
+    int size; 
+};
+
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct Queue* InitializeQueue(int value);
-void Free(struct Queue* item); 
+void FreeQueueItem(struct Queue* item); 
+
+struct QueueWrapper* InitializeQueueWrapper(struct Queue* head);
+void FreeQueueWrapper(struct QueueWrapper* wrapper); 
 
 /* QUEUE FUNCTION IMPLEMENTATIONS */
-void Enqueue(struct Queue* head, struct Queue* item);
-void Enqueue(struct Queue* head, int value); //will try overloading
-struct Queue* Dequeue(struct Queue* head); 
-struct Queue* Peek(struct Queue* head); 
+void Enqueue(struct QueueWrapper* wrapper, struct Queue* item);
+void Enqueue(struct QueueWrapper* wrapper, int value); //will try overloading
+struct Queue* Dequeue(struct QueueWrapper* wrapper); 
+struct Queue* Peek(struct QueueWrapper* wrapper); 
 
-int Size(struct Queue* head); 
-int isEmpty(struct Queue* head); 
+int Size(struct QueueWrapper* wrapper); 
+int isEmpty(struct QueueWrapper* wrapper); 
 
 /* PRINT FUNCTIONS */
 void PrintSingleQueueItem(struct Queue* item); 
-void PrintFullQueue(struct Queue* head); 
+void PrintFullQueue(struct QueueWrapper* wrapper); 
 
 /* QUEUE DEMO */
 void run_queue_test(void);
