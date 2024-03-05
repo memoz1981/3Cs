@@ -18,7 +18,7 @@ typedef struct QueueWrapper
 struct Queue* InitializeQueue(int value);
 void FreeQueueItem(struct Queue* item); 
 
-struct QueueWrapper* InitializeQueueWrapper(struct Queue* head);
+struct QueueWrapper* InitializeQueueWrapper();
 void FreeQueueWrapper(struct QueueWrapper* wrapper); 
 
 /* QUEUE FUNCTION IMPLEMENTATIONS */

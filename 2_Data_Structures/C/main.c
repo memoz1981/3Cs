@@ -9,7 +9,7 @@ gcc.exe -o 2_data_structures.exe -w main.c stack.c -> -w will hide the warning m
 
 int main()
 {
-    run_stack_test(); 
+    run_queue_test(); 
     return 0; 
 }
 
