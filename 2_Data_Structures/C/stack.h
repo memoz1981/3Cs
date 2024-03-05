@@ -38,7 +38,7 @@ void PrintStack(struct Stack* stack);
 void run_stack_test(void);
 
 /*
-STACK DEMO - Behind the Hoods
+STACK DEMO - Behind the Hoods - to be populated...
 
 1) 
 */
