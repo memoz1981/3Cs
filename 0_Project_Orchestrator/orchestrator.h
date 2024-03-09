@@ -1,7 +1,9 @@
 //Define the orchestrator
 enum ProjectType
 {
-    C, C_Sharp, C_Plus_Plus
+    PROJECT_TYPE_C,
+    PROJECT_TYPE_C_SHARP,
+    PROJECT_TYPE_C_PLUS_PLUS
 }; 
 
 typedef struct ProjectDemo

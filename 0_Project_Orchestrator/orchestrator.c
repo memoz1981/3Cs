@@ -4,7 +4,6 @@
 #include <assert.h>
 #include <string.h>
 
-char* GetCurrentDirectory();
 ChangeDirectory(char* relative_path);
 void BuildC(struct ProjectDemo* project, char* command);
 void BuildCSharp(struct ProjectDemo* project, char* command);
@@ -18,12 +17,17 @@ struct ProjectDemo* InitializeNewProjectDemo(
     enum ProjectType project_type)
     {
         /* Get current directory */
-        char* current_directory = GetCurrentDirectory();
+        char current_directory[1024];
+        getcwd(current_directory, sizeof(current_directory)); 
 
         /* Validations */
         assert(strlen(relative_path)<=1024); 
         assert(strlen(current_directory)<=1024); 
-        assert(strlen(executable_name)<=64); 
+        if(project_type == PROJECT_TYPE_C)
+        {
+            assert(strlen(executable_name)<=64); 
+        }
+        
         assert(strlen(arguments)<=256); 
 
         /* Memory allocation */
@@ -38,18 +42,15 @@ struct ProjectDemo* InitializeNewProjectDemo(
         /* field allocations */ 
         strcpy(project->relative_path, relative_path); 
         strcpy(project->current_directory, current_directory); 
-        strcpy(project->executable_name, executable_name); 
         strcpy(project->arguments, arguments); 
+        if(project_type != PROJECT_TYPE_C_SHARP)
+        {
+            strcpy(project->executable_name, executable_name); 
+        }
 
+        project->project_type = project_type; 
         return project; 
     }
-
-/* private method to return running directory*/
-char* GetCurrentDirectory()
-{
-    char cwd[1024];
-    return getcwd(cwd, sizeof(cwd)); 
-}
 
 ChangeDirectory(char* relative_path)
 {
@@ -58,15 +59,16 @@ ChangeDirectory(char* relative_path)
 
 int Build(struct ProjectDemo* project)
 {
+    printf("Building..."); 
     ChangeDirectory(project->relative_path); 
     char* command = (char*)malloc(512 * sizeof(char)); 
     memset(command, '\0', 512); 
 
     switch(project->project_type) {
-        case C:
+        case PROJECT_TYPE_C:
             BuildC(project, command); 
             break; 
-        case C_Sharp:
+        case PROJECT_TYPE_C_SHARP:
             BuildCSharp(project, command); 
             break; 
         default:
@@ -75,18 +77,20 @@ int Build(struct ProjectDemo* project)
 
     system(command); 
     free(command); 
+    printf("Built"); 
 }
 
 int Run(struct ProjectDemo* project)
 {
+    printf("Running"); 
     char* command = (char*)malloc(512 * sizeof(char)); 
     memset(command, '\0', 512); 
 
     switch(project->project_type) {
-        case C:
+        case PROJECT_TYPE_C:
             RunC(project, command); 
             break; 
-        case C_Sharp:
+        case PROJECT_TYPE_C_SHARP:
             RunCSharp(project, command); 
             break; 
         default:
@@ -97,6 +101,7 @@ int Run(struct ProjectDemo* project)
     free(command); 
 
     chdir(project->current_directory); 
+    printf("Ran..."); 
 }
 
 void BuildC(struct ProjectDemo* project, char* command)

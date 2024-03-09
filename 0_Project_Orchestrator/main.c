@@ -9,17 +9,17 @@ gcc.exe -o main.exe -w main.c orchestrator.c
 
 int main()
 {
-    printf("Make one of following selections:\n"); 
-    printf("1 for Hello world app in C.\n"); 
-    printf("2 for Hello world app in C#.\n"); 
+     
 
     struct ProjectDemo* hello_world_c = InitializeNewProjectDemo(
-        "../1_Hello_World/C", "hello_world.exe", "main.c", C); 
+        "../1_Hello_World/C", "hello_world.exe", "main.c", PROJECT_TYPE_C); 
     struct ProjectDemo* hello_world_c_sharp = InitializeNewProjectDemo(
-        "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", C_Sharp); 
-
+        "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", PROJECT_TYPE_C_SHARP); 
+    printf("Make one of following selections:\n"); 
+    printf("1 for Hello world app in C.\n"); 
+    printf("2 for Hello world app in C#.\n");
     int result; 
-    scanf("%d", result); 
+    scanf("%d", &result); 
 
     if(result == 1)
     {
