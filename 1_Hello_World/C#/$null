@@ -1,0 +1,10 @@
+MSBuild version 17.7.4+3ebbd7c49 for .NET
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  HelloWorldApp -> D:\0. Git\3Cs\1_Hello_World\C#\bin\Debug\net7.0\HelloWorldApp.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.89

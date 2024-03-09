@@ -7,6 +7,18 @@ As a tribute to "Hello world!!!" phrase - first project will be **Hello World**.
 
 The implementations are far away from being perfect (especially for C and in future for C++) - so any comments and suggestions will be much appreciated. 
 
+# Project Orchestrator
+A C project that will be used like UI - from where it will be possible to call
+all other C, C# and C++ programs/applications. Trying to use powershell commands. 
+With each project/code addition, this needs to be updated to ensure all new projects
+appear in the "UI Menu". 
+
+To run the project:
+- Go to directory: 0_Project_Orchestrator
+- Run following command to build: gcc.exe -o main.exe -w main.c orchestrator.c (or corresponding command for the compiler)
+- Run following command to run: .\main.exe
+- Follow the menu items
+
 # Hello World !!!
 Just wanted to say hello folks... 
 
