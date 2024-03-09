@@ -7,20 +7,12 @@ struct Queue* InitializeQueue(int value)
     struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue)); 
     if(queue == NULL)
     {
-        printf("Memory error when allocating memory for the queue. "); 
+        printf("Memory error when allocating memory for the queue.\n"); 
         return NULL; 
     }
-
     queue->value = value; 
     queue->next = NULL; 
-    
-
     return queue; 
-}
-
-void FreeQueueItem(struct Queue* head)
-{
-    free(head); 
 }
 
 struct QueueWrapper* InitializeQueueWrapper()
@@ -28,40 +20,45 @@ struct QueueWrapper* InitializeQueueWrapper()
     struct QueueWrapper* wrapper = (struct QueueWrapper*)malloc(sizeof(struct QueueWrapper)); 
     if(wrapper == NULL)
     {
-        printf("Memory error when allocating memory for the queue. "); 
+        printf("Memory error when allocating memory for the queue wrapper.\n"); 
         return NULL; 
     }
-
     wrapper->head = NULL; 
     wrapper->size = 0; 
-
     return wrapper; 
 }
 
 void FreeQueueWrapper(struct QueueWrapper* wrapper)
 {
+    struct Queue* current = wrapper->head; 
+    while (current != NULL) {
+        struct Queue* temp = current;
+        current = current->next;
+        printf("\nFreeing following queue item: "); 
+        PrintSingleQueueItem(temp);
+        free(temp);
+    }
+    
+    printf("\nFreeing wrapper\n"); 
     free(wrapper); 
 }
 
 /* QUEUE FUNCTION IMPLEMENTATIONS */
 /*Enqueue function is O(n) - we need to add the element to the end of the queue*/
-void Enqueue(struct QueueWrapper* wrapper, struct Queue* item)
+void Enqueue(struct QueueWrapper* wrapper, int value)
 {
-    printf("\nEnqueueing value %d\n", item->value); 
+    struct Queue* item = InitializeQueue(value); 
     struct Queue* iterator = wrapper->head; 
     wrapper->size++; 
-
     if(iterator == NULL)
     {
         wrapper->head = item; 
         return; 
     }
- 
     while(iterator->next != NULL)
     {
         iterator = iterator->next; 
     }
-
     iterator->next = item; 
 }
 
@@ -70,36 +67,27 @@ Dequeue function is O(1) - we just return the head
 This is the main purpose of the wrapper - every time we dequeue the queue, we loose the 
 reference to the queue
 */
-struct Queue* Dequeue(struct QueueWrapper* wrapper)
+int Dequeue(struct QueueWrapper* wrapper)
 {
-    printf("\nDequeueing...\n"); 
     if(wrapper->head == NULL)
     {
-        printf("\nDequeued NULL.\n"); 
         return NULL; 
     }
-    
     struct Queue* head = wrapper->head; 
     wrapper->size--; 
     wrapper->head = wrapper->head->next;
-
-    printf("\nDequeued value of %d.\n", head->value); 
     return head->value; 
 }
 
 /*
 PeekQueue is similar to dequeue function - it only returns without removing the item 
 */
-struct Queue* PeekQueue(struct QueueWrapper* wrapper)
+int PeekQueue(struct QueueWrapper* wrapper)
 {
-    printf("\nPeeking...\n"); 
     if(wrapper->head == NULL)
     {
-        printf("\nPeeked NULL.\n"); 
-        return NULL; 
+        return -1; 
     }
-
-    printf("\nDequeued value of %d.\n", wrapper->head->value); 
     return wrapper->head->value; 
 }
 
@@ -125,78 +113,93 @@ void PrintSingleQueueItem(struct Queue* queue)
 {
     if(queue == NULL)
     {
-        printf("Queue is NULL"); 
         return; 
     }
-
-    printf("{value: %d, address: %p}",  queue->value, (void*)(&queue)); 
+    printf("{value: %d, address: %p}",  queue->value, (void*)(queue)); 
 }
 
 void PrintFullQueue(struct QueueWrapper* wrapper)
 {
     struct Queue* iterator = wrapper->head;
-
     printf("\nQueue Wrapper: "); 
     if(wrapper->head == NULL)
     {
         printf("NULL\n"); 
         return; 
     }
-
     for(int i=0; i<wrapper->size; i++)
     {
         PrintSingleQueueItem(iterator); 
         printf(" -> "); 
         iterator = iterator->next;
     }
-
-    printf("\n"); 
+    printf("NULL\n"); 
 }
 
 /* QUEUE DEMO */
-void run_queue_test(void)
+void RunQueueInInteractiveMode(void)
 {
-    struct Queue* queue[5];  
-    struct QueueWrapper* wrapper; 
-    
-    //Initialization
-    for(int i=0; i<5; i++)
-    {
-        queue[i] = InitializeQueue(i); 
-        PrintSingleQueueItem(queue[i]); 
+    struct QueueWrapper* wrapper = InitializeQueueWrapper(); 
+    int result; 
+    do{
+        result = RunInteractiveCycle(wrapper); 
     }
+    while (result != -1);
     
-    printf("\n4.Queue Wrapper is being initialized\n"); 
-    wrapper = InitializeQueueWrapper(); 
-    PrintFullQueue(wrapper); 
-    printf("\n5.Wrapper size: %d\n", Size(wrapper));
-    printf("\n6.Wrapper empty flag: %d\n", isEmpty(wrapper)); 
-
-    PeekQueue(wrapper); 
-
-    //Actions
-    printf("\n7.Actions: \n"); 
-    Enqueue(wrapper, queue[0]); 
-    Enqueue(wrapper, queue[1]); 
-    Enqueue(wrapper, queue[2]); 
-    Enqueue(wrapper, queue[3]); 
-    struct Queue* dequeued1 = Dequeue(wrapper); 
-    Enqueue(wrapper, queue[4]);
-    struct Queue* dequeued2 = Dequeue(wrapper); 
-
-    printf("Wrapper size: %d\n", Size(wrapper));
-    printf("Wrapper empty flag: %d\n", isEmpty(wrapper)); 
-
-    PeekQueue(wrapper); 
-    
-    PrintFullQueue(wrapper); 
     FreeQueueWrapper(wrapper); 
+}
 
-    for(int i=0; i<5; i++)
-    {
-        FreeQueueItem(queue[i]);  
-    }
+int RunInteractiveCycle(struct QueueWrapper* wrapper)
+{
+    printf("\n\n\nINTERACTIVE QUEUE COMMANDS:\n"); 
+    printf("[c] - for clearing the screen\n");
+    printf("[r] - to print the queue\n");
+    printf("[e] - to exit\n");
+    printf("[+] - to add integer to the queue\n");
+    printf("[d] - to dequeue\n");
+    printf("[p] - to peek\n");
+    printf("[s] - to print queue size\n");
     
-    printf("Free-ing complete"); 
-    return; 
+    char command; 
+    int value; 
+    int result = 0; 
+    
+    scanf(" %c", &command);
+    printf("received %c\n", command); 
+    // Process user input
+        switch (command) {
+            case 'c':
+                system("cls"); 
+                break;
+            case 'r':
+                PrintFullQueue(wrapper); 
+                break;
+            case 'e':
+                system("cls"); 
+                return -1; 
+                break;
+            case 'd':
+                int dequeued = Dequeue(wrapper); 
+                printf("Peeked %d", dequeued); 
+                break;
+            case 'p':
+                int peeked = PeekQueue(wrapper);
+                printf("Peeked %d", peeked); 
+                break;
+            case 's':
+                int queueSize = QueueSize(wrapper);
+                printf("Queue size is: %d\n", queueSize);
+                break;
+            case '+':
+                printf("\nEnter the integer to add to the queue: ");
+                scanf("%d", &value); 
+                Enqueue(wrapper, value);
+                break;
+            default:
+                printf("Invalid command\n");
+                result = -1; 
+                break; 
+        }
+
+    return result; 
 }

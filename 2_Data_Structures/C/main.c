@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     }
     else if(isQueueCalled == 0)
     {
-        run_queue_test(); 
+        RunQueueInInteractiveMode(); 
     }
     else
     {
