@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     
     if(isStackCalled == 0)
     {
-        run_stack_test(); 
+        RunStackInInteractiveMode(); 
     }
     else if(isQueueCalled == 0)
     {
-        run_queue_test(); 
+        RunQueueInInteractiveMode(); 
     }
     else
     {
