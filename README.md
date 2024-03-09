@@ -9,3 +9,11 @@ The implementations are far away from being perfect (especially for C and in fut
 
 # Hello World !!!
 Just wanted to say hello folks... 
+
+# Data Structures
+Aim is to implement data structures in C and C# (and later in C++) - using different implementations. Following data structures are planned to be covered in this section: 
+- Stack
+- Queue
+- Linked List
+- Binary Tree
+- (Optional) A Graph implementation
