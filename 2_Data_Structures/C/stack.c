@@ -16,73 +16,93 @@ struct Stack* InitializeStack(int value)
     return stack; 
 }
 
-void Free(struct Stack* stack)
-{
-    free(stack); 
-}
-
 struct StackWrapper* InitializeStackWrapper()
 {
     struct StackWrapper* wrapper = (struct StackWrapper*)malloc(sizeof(struct StackWrapper));
-    *(wrapper->top) = NULL; 
+    
+    if (wrapper == NULL) {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+    
+    wrapper->top = NULL; 
     wrapper->count = 0; 
 
     return wrapper; 
 }
 
-void FreeWrapper(struct StackWrapper* wrapper)
+void FreeStackWrapper(struct StackWrapper* wrapper)
 {
-    *(wrapper->top) = NULL; 
+    struct Stack* current = wrapper->top; 
+    
+    while (current != NULL) {
+        struct Stack* temp = current;
+        current = current->next;
+        printf("\nFreeing following stack item: "); 
+        PrintStackItem(temp);
+        free(temp);
+    }
+    
+    printf("\nFreeing wrapper\n"); 
     free(wrapper); 
 }
 
 /* STACK FUNCTION IMPLEMENTATIONS */
 
-void Push(struct StackWrapper* wrapper, struct Stack* stack)
+void PushToStack(struct StackWrapper* wrapper, int value)
 {
-    printf("Pushing stack with value of %d to wrapper\n", stack->value); 
-    if(*(wrapper->top) == NULL)
+    struct Stack* stack = InitializeStack(value); 
+    wrapper->count++;
+
+    if(wrapper->top == NULL)
     {
-        stack->next = NULL; 
-        *(wrapper->top) = stack; 
-        wrapper->count = 1; 
+        wrapper->top = stack; 
         return; 
     }
 
-    stack->next = *(wrapper->top); 
-    *(wrapper->top) = stack; 
-    wrapper->count++; 
-}
-
-struct Stack* Pop(struct StackWrapper* wrapper)
-{
-    if(*(wrapper->top) == NULL)
-    {
-        printf("Popped null stack from wrapper\n");
-        return NULL;  
-    }
-
-    struct Stack* top = *(wrapper->top); 
-    *(wrapper->top) = top->next;  
+    struct Stack* iterator = wrapper->top; 
     
-    printf("Popped stack with value of %d to wrapper\n", top->value); 
-    wrapper->count--; 
-    return top; 
+    while(iterator->next != NULL)
+        iterator = iterator->next; 
+    
+    iterator->next = stack; 
 }
 
-struct Stack* Peek(struct StackWrapper* wrapper)
+int PopFromStack(struct StackWrapper* wrapper)
 {
-    if(*(wrapper->top) == NULL)
+    if(wrapper->top == NULL)
+        return -1; 
+    
+    wrapper->count--;
+    int value; 
+    struct Stack* iterator = wrapper->top; 
+    if(iterator->next == NULL)
     {
-        printf("Peeked null stack from wrapper\n");
-        return NULL; 
+        value = iterator->value; 
+        wrapper->top = NULL;
+        return value; 
     }
+    while(iterator->next->next != NULL)
+        iterator = iterator->next; 
+    value = iterator->next->value; 
+    iterator->next = NULL; 
 
-    printf("Peeked stack with value of %d from wrapper\n", (*(wrapper->top))->value); 
-    return *(wrapper->top); 
+    return value; 
 }
 
-int Size(struct StackWrapper* wrapper)
+int PeekFromStack(struct StackWrapper* wrapper)
+{
+    if(wrapper->top == NULL)
+        return -1; 
+
+    struct Stack* iterator = wrapper->top; 
+    while(iterator->next != NULL)
+        iterator = iterator->next; 
+    
+    return iterator->value;  
+}
+
+int StackSize(struct StackWrapper* wrapper)
 {
     if(!wrapper)
         return -1; 
@@ -90,7 +110,7 @@ int Size(struct StackWrapper* wrapper)
     return wrapper->count; 
 }
 
-int isEmpty(struct StackWrapper* wrapper)
+int isStackEmpty(struct StackWrapper* wrapper)
 {
     if(!wrapper)
         return -1; 
@@ -100,76 +120,95 @@ int isEmpty(struct StackWrapper* wrapper)
 
 /* PRINT FUNCTIONS */
 
-void PrintWrapper(struct StackWrapper* wrapper)
-{
-    printf("\nWrapper is being printed with count of %d\n", wrapper->count);
-    struct Stack* stack = *(wrapper->top);
-
-    while(stack)
-    {
-        PrintStack(stack); 
-        stack = stack->next;
-    }
-    printf("\nWrapper print complete\n"); 
-} 
-
-void PrintStack(struct Stack* stack)
+void PrintStackItem(struct Stack* stack)
 {
     if(stack == NULL)
-    printf("Stack is NULL\n"); 
-    int nextvalue = -1;
-    if(stack->next)
-    {
-        nextvalue = stack->next->value; 
-    }
-
-    printf("\nStack value %d and address %p and next value is %d\n", stack->value, (void*)(&stack), nextvalue); 
+        printf("NULL STACK"); 
+    
+    printf("{value: %d, address: %p}",  stack->value, (void*)(stack)); 
 }
 
-/* STACK DEMO */
-void run_stack_test(void)
+void PrintStack(struct StackWrapper* wrapper)
 {
-    printf("Defining stack array of 5 elements\n"); 
-    struct Stack* stack[5];  
-    printf("Defining stack wrapper\n");
-    struct StackWrapper* wrapper; 
-    
-    //Initialization
-    printf("Stacks are being initialized\n"); 
-    for(int i=0; i<5; i++)
+    struct Stack* iterator = wrapper->top;
+    printf("\nStack Wrapper: "); 
+    if(wrapper->top == NULL)
     {
-        stack[i] = InitializeStack(i); 
-        PrintStack(stack[i]); 
+        printf("NULL\n"); 
+        return; 
     }
-    
-    printf("Stack Wrapper is being initialized\n"); 
-    wrapper = InitializeStackWrapper(); 
-    PrintWrapper(wrapper); 
-    printf("Wrapper size: %d\n", Size(wrapper));
-    printf("Wrapper is empty: %d\n", isEmpty(wrapper)); 
-    Peek(wrapper); 
-
-    //Actions
-    Push(wrapper, stack[0]); 
-    Push(wrapper, stack[1]); 
-    Push(wrapper, stack[2]); 
-    Push(wrapper, stack[3]); 
-    struct Stack* popped1 = Pop(wrapper); 
-    Push(wrapper, stack[4]);
-    struct Stack* popped2 = Pop(wrapper); 
-
-    printf("Wrapper size: %d\n", Size(wrapper));
-    printf("Wrapper is empty: %d\n", isEmpty(wrapper)); 
-    Peek(wrapper); 
-    
-    PrintWrapper(wrapper); 
-    FreeWrapper(wrapper); 
-
-    for(int i=0; i<5; i++)
+    for(int i=0; i<wrapper->count; i++)
     {
-        Free(stack[i]);  
+        PrintStackItem(iterator); 
+        printf(" -> "); 
+        iterator = iterator->next;
     }
+    printf("NULL\n"); 
+} 
+
+/* STACK DEMO */
+void RunStackInInteractiveMode(void)
+{
+    printf("running interactive"); 
+    struct StackWrapper* wrapper = InitializeStackWrapper(); 
+    int result; 
+    do{
+        result = RunStackInteractiveCycle(wrapper); 
+    }
+    while (result != -1);
     
-    printf("Free-ing complete"); 
-    return; 
+    FreeStackWrapper(wrapper); 
+}
+
+int RunStackInteractiveCycle(struct StackWrapper* wrapper)
+{
+    printf("\n\n\nINTERACTIVE STACK COMMANDS:\n"); 
+    printf("[c] - for clearing the screen\n");
+    printf("[r] - to print the stack\n");
+    printf("[e] - to exit\n");
+    printf("[+] - to push integer to the stack\n");
+    printf("[d] - to pop\n");
+    printf("[p] - to peek\n");
+    printf("[s] - to print stack count\n");
+    
+    char command; 
+    int value; 
+    int result = 0; 
+    
+    scanf(" %c", &command);
+    printf("received %c\n", command); 
+    // Process user input
+        switch (command) {
+            case 'c':
+                system("cls"); 
+                break;
+            case 'r':
+                PrintStack(wrapper); 
+                break;
+            case 'e':
+                return -1; 
+                break;
+            case 'd':
+                int removed = PopFromStack(wrapper); 
+                printf("Popped %d", removed); 
+                break;
+            case 'p':
+                int peeked = PeekFromStack(wrapper);
+                printf("Peeked %d", peeked); 
+                break;
+            case 's':
+                int stackCount = StackSize(wrapper);
+                printf("Stack count is: %d\n", stackCount);
+                break;
+            case '+':
+                printf("\nEnter the integer to push to the stack: ");
+                scanf("%d", &value); 
+                PushToStack(wrapper, value);
+                break;
+            default:
+                printf("Invalid command\n");
+                break; 
+        }
+
+    return result; 
 }

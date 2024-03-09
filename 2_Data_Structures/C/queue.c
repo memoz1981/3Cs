@@ -66,6 +66,10 @@ void Enqueue(struct QueueWrapper* wrapper, int value)
 Dequeue function is O(1) - we just return the head
 This is the main purpose of the wrapper - every time we dequeue the queue, we loose the 
 reference to the queue
+Note: returning the value because of 2 reasons: 
+1 - business doesn't need the address - just value is required
+2 - we want to free memory for anything removed - this it's very practical to 
+return value and free associated memory
 */
 int Dequeue(struct QueueWrapper* wrapper)
 {
@@ -142,14 +146,14 @@ void RunQueueInInteractiveMode(void)
     struct QueueWrapper* wrapper = InitializeQueueWrapper(); 
     int result; 
     do{
-        result = RunInteractiveCycle(wrapper); 
+        result = RunQueueInteractiveCycle(wrapper); 
     }
     while (result != -1);
     
     FreeQueueWrapper(wrapper); 
 }
 
-int RunInteractiveCycle(struct QueueWrapper* wrapper)
+int RunQueueInteractiveCycle(struct QueueWrapper* wrapper)
 {
     printf("\n\n\nINTERACTIVE QUEUE COMMANDS:\n"); 
     printf("[c] - for clearing the screen\n");
@@ -175,7 +179,6 @@ int RunInteractiveCycle(struct QueueWrapper* wrapper)
                 PrintFullQueue(wrapper); 
                 break;
             case 'e':
-                system("cls"); 
                 return -1; 
                 break;
             case 'd':
@@ -197,7 +200,6 @@ int RunInteractiveCycle(struct QueueWrapper* wrapper)
                 break;
             default:
                 printf("Invalid command\n");
-                result = -1; 
                 break; 
         }
 
