@@ -11,45 +11,49 @@ void RunCSharp(struct ProjectDemo* project, char* command);
 struct ProjectDemo* InitializeNewProjectDemo(
     char* relative_path, 
     char* executable_name, 
-    char* arguments,
+    char* build_arguments,
     enum ProjectType project_type,
     int project_id,
-    char* project_name)
+    char* project_name,
+    char* run_arguments)
     {
         /* Get current directory */
-        char current_directory[1024];
-        getcwd(current_directory, sizeof(current_directory)); 
+        char current_directory[MAX_PATH_LENGTH];
+        getcwd(current_directory, MAX_PATH_LENGTH); 
 
         /* Validations */
-        assert(strlen(relative_path)<=1024); 
-        assert(strlen(current_directory)<=1024); 
+        assert(strlen(relative_path) <= MAX_PATH_LENGTH); 
+        assert(strlen(current_directory) <= MAX_PATH_LENGTH); 
         if(project_type == PROJECT_TYPE_C)
         {
-            assert(strlen(executable_name)<=64); 
+            assert(strlen(executable_name) <= MAX_NAME_LENGTH); 
         }
-        assert(strlen(arguments)<=256); 
+        assert(strlen(project_name) <= MAX_NAME_LENGTH); 
+        assert(strlen(build_arguments) <= MAX_ARGUMENT_LENGTH);
+        assert(strlen(run_arguments) <= MAX_ARGUMENT_LENGTH); 
         assert(project_id > 0); 
-        assert(strlen(project_name)<=32); 
-
-        /* Memory allocation */
+ 
+         /* Memory allocation */
         struct ProjectDemo* project = (struct ProjectDemo*)malloc(sizeof(struct ProjectDemo));
 
         /* free allocated memory for strings */ 
-        memset(project->relative_path, '\0', 1024); 
-        memset(project->current_directory, '\0', 1024); 
-        memset(project->executable_name, '\0', 64); 
-        memset(project->arguments, '\0', 256); 
-        memset(project->project_name, '\0', 32); 
+        memset(project->relative_path, '\0', MAX_PATH_LENGTH); 
+        memset(project->current_directory, '\0', MAX_PATH_LENGTH); 
+        memset(project->executable_name, '\0', MAX_NAME_LENGTH); 
+        memset(project->project_name, '\0', MAX_ARGUMENT_LENGTH); 
+        memset(project->build_arguments, '\0', MAX_ARGUMENT_LENGTH); 
+        memset(project->run_arguments, '\0', MAX_ARGUMENT_LENGTH); 
 
         /* field allocations */ 
         strcpy(project->relative_path, relative_path); 
         strcpy(project->current_directory, current_directory); 
-        strcpy(project->arguments, arguments); 
         if(project_type != PROJECT_TYPE_C_SHARP)
         {
             strcpy(project->executable_name, executable_name); 
         }
         strcpy(project->project_name, project_name); 
+        strcpy(project->build_arguments, build_arguments); 
+        strcpy(project->run_arguments, run_arguments); 
 
         project->project_type = project_type; 
         project->project_id = project_id; 
@@ -144,22 +148,24 @@ void BuildC(struct ProjectDemo* project, char* command)
     strcat(command, "powershell.exe gcc.exe -o "); 
     strcat(command, project->executable_name);
     strcat(command, " -w ");
-    strcat(command, project->arguments);
+    strcat(command, project->build_arguments);
 }
 
 void BuildCSharp(struct ProjectDemo* project, char* command)
 {
     strcat(command, "powershell.exe dotnet build "); 
-    strcat(command, project->arguments); 
+    strcat(command, project->build_arguments); 
 }
 
 void RunC(struct ProjectDemo* project, char* command)
 {
     strcat(command, project->executable_name); 
+    strcat(command, " "); 
+    strcat(command, project->run_arguments); 
 }
 
 void RunCSharp(struct ProjectDemo* project, char* command)
 {
     strcat(command, "powershell.exe dotnet run --project "); 
-    strcat(command, project->arguments); 
+    strcat(command, project->run_arguments); 
 }

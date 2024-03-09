@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "orchestrator.h"
 
-#define PROJECT_COUNT 2
+#define PROJECT_COUNT 4
 
 /*
 gcc.exe -o main.exe -w main.c orchestrator.c
@@ -28,10 +28,11 @@ int main()
 
 int Orchestrate(struct ProjectDemo** projects)
 {
-    printf("\nSelect project to run as below:\n");
+    printf("\nSelect project demo to run as below:\n");
+    printf("[0] - To clear the screen.\n"); 
     for(int i = 1; i <= PROJECT_COUNT ; i++)
     {
-        printf("%d to run project %s\n", i, projects[i-1]->project_name); 
+        printf("[%d] - To run project demo %s\n", i, projects[i-1]->project_name); 
     }
     printf("-1 to exit.\n"); 
     
@@ -58,6 +59,10 @@ int Orchestrate(struct ProjectDemo** projects)
         }
         return 0; 
     }
+    else if(result == 0)
+    {
+        system("cls");
+    }
     else if(result == -1)
         return result; 
     else
@@ -72,11 +77,19 @@ struct ProjectDemo** BuildProjects()
     
     projects[0] = InitializeNewProjectDemo(
         "../1_Hello_World/C", "hello_world.exe", "main.c", 
-        PROJECT_TYPE_C, 1, "hello_world_c"); 
+        PROJECT_TYPE_C, 1, "hello_world_c", ""); 
     
     projects[1] = InitializeNewProjectDemo(
         "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", 
-        PROJECT_TYPE_C_SHARP, 2, "hello_world_c_sharp"); 
+        PROJECT_TYPE_C_SHARP, 2, "hello_world_c_sharp", "HelloWorldApp.csproj"); 
+
+    projects[2] = InitializeNewProjectDemo(
+        "../2_Data_Structures/C", "stack.exe", "main.c queue.c stack.c", 
+        PROJECT_TYPE_C, 3, "stack_c", ""); 
+    
+    projects[3] = InitializeNewProjectDemo(
+        "../2_Data_Structures/C", "queue.exe", "main.c queue.c stack.c", 
+        PROJECT_TYPE_C, 3, "queue_c", ""); 
     
     return projects;
 }
