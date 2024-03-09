@@ -1,10 +1,8 @@
 #include "orchestrator.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 
-ChangeDirectory(char* relative_path);
 void BuildC(struct ProjectDemo* project, char* command);
 void BuildCSharp(struct ProjectDemo* project, char* command);
 void RunC(struct ProjectDemo* project, char* command);
@@ -52,15 +50,9 @@ struct ProjectDemo* InitializeNewProjectDemo(
         return project; 
     }
 
-ChangeDirectory(char* relative_path)
-{
-    chdir(relative_path); 
-}
-
 int Build(struct ProjectDemo* project)
 {
-    printf("Building..."); 
-    ChangeDirectory(project->relative_path); 
+    chdir(project->relative_path); 
     char* command = (char*)malloc(512 * sizeof(char)); 
     memset(command, '\0', 512); 
 
@@ -75,14 +67,15 @@ int Build(struct ProjectDemo* project)
             break; 
     }
 
-    system(command); 
+    strcat(command, " >$null");
+    int result = system(command); 
     free(command); 
-    printf("Built"); 
+
+    return result; 
 }
 
 int Run(struct ProjectDemo* project)
 {
-    printf("Running"); 
     char* command = (char*)malloc(512 * sizeof(char)); 
     memset(command, '\0', 512); 
 
@@ -97,11 +90,11 @@ int Run(struct ProjectDemo* project)
             break; 
     }
 
-    system(command); 
+    int result = system(command); 
     free(command); 
 
     chdir(project->current_directory); 
-    printf("Ran..."); 
+    return result; 
 }
 
 void BuildC(struct ProjectDemo* project, char* command)
