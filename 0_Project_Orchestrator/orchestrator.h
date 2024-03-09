@@ -13,15 +13,20 @@ typedef struct ProjectDemo
     char executable_name[64]; 
     char arguments[256]; 
     enum ProjectType project_type; 
+    int project_id;
+    char project_name[32]; 
 };
 
 struct ProjectDemo* InitializeNewProjectDemo(
     char* relative_path, 
     char* executable_name, 
     char* arguments,
-    enum ProjectType project_type); 
+    enum ProjectType project_type,
+    int project_id,
+    char* project_name); 
 
 int Build(struct ProjectDemo* project); 
 
 int Run(struct ProjectDemo* project); 
 
+void Project_Demo_To_String(struct ProjectDemo* project); 

@@ -2,31 +2,37 @@
 #include <stdlib.h>
 #include "orchestrator.h"
 
+#define PROJECT_COUNT 2
+
 /*
 gcc.exe -o main.exe -w main.c orchestrator.c
 .\main.exe
 */
 
+struct ProjectDemo** BuildProjects();
+
 int main()
 {
     int result; 
+    struct ProjectDemo** projects = BuildProjects(); 
     do
     {
-        result = Orchestrate(); 
+        result = Orchestrate(projects); 
     } while (result != -1);
     
+    for(int i =0; i < PROJECT_COUNT; i++)
+       free(projects[i]); 
+
     return 0; 
 }
 
-int Orchestrate()
+int Orchestrate(struct ProjectDemo** projects)
 {
-    struct ProjectDemo* hello_world_c = InitializeNewProjectDemo(
-        "../1_Hello_World/C", "hello_world.exe", "main.c", PROJECT_TYPE_C); 
-    struct ProjectDemo* hello_world_c_sharp = InitializeNewProjectDemo(
-        "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", PROJECT_TYPE_C_SHARP); 
-    printf("\nMake one of following selections:\n"); 
-    printf("1 for Hello world app in C.\n"); 
-    printf("2 for Hello world app in C#.\n");
+    printf("\nSelect project to run as below:\n");
+    for(int i = 1; i <= PROJECT_COUNT ; i++)
+    {
+        printf("%d to run project %s\n", i, projects[i-1]->project_name); 
+    }
     printf("-1 to exit.\n"); 
     
     int result; 
@@ -36,40 +42,42 @@ int Orchestrate()
         printf("Invalid selection...\n"); 
         return -1; 
     }
-    
-    if(result == 1)
+
+    if(result >= 1 && result <= PROJECT_COUNT)
     {
-        if(Build(hello_world_c))
+        Project_Demo_To_String(projects[result-1]); 
+        
+        if(Build(projects[result-1]))
         {
-            printf("Build failed..."); 
+            printf("Failed to build...\n"); 
         }
 
-        if(Run(hello_world_c))
+        if(Run(projects[result-1]))
         {
-            printf("Build failed..."); 
+            printf("Failed to run...\n"); 
         }
         return 0; 
     }
-    else if(result == 2)
-    {
-        if(Build(hello_world_c_sharp))
-        {
-            printf("Build failed..."); 
-        }
-
-        if(Run(hello_world_c_sharp))
-        {
-            printf("Build failed..."); 
-        }
-    }
     else if(result == -1)
-    {
-        printf("-1 selected. exiting. ");
-    }
-    else 
-    {
-        printf("Invalid selection"); 
-    }
+        return result; 
+    else
+        printf("Invalid selection..."); 
+    
     return result; 
+}
+
+struct ProjectDemo** BuildProjects()
+{
+    struct ProjectDemo** projects = (struct ProjectDemo**)malloc(PROJECT_COUNT * sizeof(struct ProjectDemo*)); 
+    
+    projects[0] = InitializeNewProjectDemo(
+        "../1_Hello_World/C", "hello_world.exe", "main.c", 
+        PROJECT_TYPE_C, 1, "hello_world_c"); 
+    
+    projects[1] = InitializeNewProjectDemo(
+        "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", 
+        PROJECT_TYPE_C_SHARP, 2, "hello_world_c_sharp"); 
+    
+    return projects;
 }
 

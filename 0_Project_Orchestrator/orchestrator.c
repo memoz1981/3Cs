@@ -12,7 +12,9 @@ struct ProjectDemo* InitializeNewProjectDemo(
     char* relative_path, 
     char* executable_name, 
     char* arguments,
-    enum ProjectType project_type)
+    enum ProjectType project_type,
+    int project_id,
+    char* project_name)
     {
         /* Get current directory */
         char current_directory[1024];
@@ -25,8 +27,9 @@ struct ProjectDemo* InitializeNewProjectDemo(
         {
             assert(strlen(executable_name)<=64); 
         }
-        
         assert(strlen(arguments)<=256); 
+        assert(project_id > 0); 
+        assert(strlen(project_name)<=32); 
 
         /* Memory allocation */
         struct ProjectDemo* project = (struct ProjectDemo*)malloc(sizeof(struct ProjectDemo));
@@ -36,6 +39,7 @@ struct ProjectDemo* InitializeNewProjectDemo(
         memset(project->current_directory, '\0', 1024); 
         memset(project->executable_name, '\0', 64); 
         memset(project->arguments, '\0', 256); 
+        memset(project->project_name, '\0', 32); 
 
         /* field allocations */ 
         strcpy(project->relative_path, relative_path); 
@@ -45,8 +49,11 @@ struct ProjectDemo* InitializeNewProjectDemo(
         {
             strcpy(project->executable_name, executable_name); 
         }
+        strcpy(project->project_name, project_name); 
 
         project->project_type = project_type; 
+        project->project_id = project_id; 
+
         return project; 
     }
 
@@ -95,6 +102,41 @@ int Run(struct ProjectDemo* project)
 
     chdir(project->current_directory); 
     return result; 
+}
+
+void Project_Demo_To_String(struct ProjectDemo* project)
+{
+    char* output = (char*)malloc(64 * sizeof(char)); 
+    memset(output, '\0', 64); 
+
+    if(project->project_type == PROJECT_TYPE_C)
+    {
+        strcat(output, "Project Type: C; ");
+    }
+    else if(project->project_type == PROJECT_TYPE_C_SHARP)
+    {
+        strcat(output, "Project Type: C#; ");
+    }
+    else if(project->project_type == PROJECT_TYPE_C_PLUS_PLUS)
+    {
+        strcat(output, "Project Type: C++; ");
+    }
+    else
+    {
+        strcat(output, "Project Type: Unknown; ");
+    }
+    
+    strcat(output, "Project Name: ");
+    strcat(output, project->project_name); 
+
+    strcat(output, "; id: ");
+    char numStr[2];
+    sprintf(numStr, "%d", project->project_id);
+    strcat(output, numStr); 
+    strcat(output, ".\n");
+
+    printf(output); 
+    free(output);  
 }
 
 void BuildC(struct ProjectDemo* project, char* command)
