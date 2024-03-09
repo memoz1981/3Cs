@@ -100,8 +100,9 @@ int Run(struct ProjectDemo* project)
         default:
             break; 
     }
-
+    
     int result = system(command); 
+    
     free(command); 
 
     chdir(project->current_directory); 
@@ -112,28 +113,28 @@ void Project_Demo_To_String(struct ProjectDemo* project)
 {
     char* output = (char*)malloc(64 * sizeof(char)); 
     memset(output, '\0', 64); 
-
+    strcat(output, "\n"); 
     if(project->project_type == PROJECT_TYPE_C)
     {
-        strcat(output, "Project Type: C; ");
+        strcat(output, "PROJECT TYPE: C; ");
     }
     else if(project->project_type == PROJECT_TYPE_C_SHARP)
     {
-        strcat(output, "Project Type: C#; ");
+        strcat(output, "PROJECT TYPE: C#; ");
     }
     else if(project->project_type == PROJECT_TYPE_C_PLUS_PLUS)
     {
-        strcat(output, "Project Type: C++; ");
+        strcat(output, "PROJECT TYPE: C++; ");
     }
     else
     {
-        strcat(output, "Project Type: Unknown; ");
+        strcat(output, "PROJECT TYPE: UNKNOWN; ");
     }
     
-    strcat(output, "Project Name: ");
+    strcat(output, "NAME: ");
     strcat(output, project->project_name); 
 
-    strcat(output, "; id: ");
+    strcat(output, "; ID: ");
     char numStr[2];
     sprintf(numStr, "%d", project->project_id);
     strcat(output, numStr); 

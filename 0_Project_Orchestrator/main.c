@@ -46,6 +46,7 @@ int Orchestrate(struct ProjectDemo** projects)
 
     if(result >= 1 && result <= PROJECT_COUNT)
     {
+        printf("\n\n\n*************PROJECT DEMO OUTPUT*************\n\n\n"); 
         Project_Demo_To_String(projects[result-1]); 
         
         if(Build(projects[result-1]))
@@ -57,6 +58,7 @@ int Orchestrate(struct ProjectDemo** projects)
         {
             printf("Failed to run...\n"); 
         }
+        printf("\n\n\n***********END OF PROJECT DEMO OUTPUT***********\n\n\n"); 
         return 0; 
     }
     else if(result == 0)
