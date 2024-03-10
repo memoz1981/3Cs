@@ -75,12 +75,15 @@ int Dequeue(struct QueueWrapper* wrapper)
 {
     if(wrapper->head == NULL)
     {
-        return NULL; 
+        return -1; 
     }
-    struct Queue* head = wrapper->head; 
+    
+    struct Queue* temp = wrapper->head; 
+    int value = temp->value; 
     wrapper->size--; 
     wrapper->head = wrapper->head->next;
-    return head->value; 
+    free(temp); 
+    return value; 
 }
 
 /*
@@ -167,6 +170,7 @@ int RunQueueInteractiveCycle(struct QueueWrapper* wrapper)
     char command; 
     int value; 
     int result = 0; 
+    int scanresult; 
     
     scanf(" %c", &command);
     printf("received %c\n", command); 
@@ -183,7 +187,7 @@ int RunQueueInteractiveCycle(struct QueueWrapper* wrapper)
                 break;
             case 'd':
                 int dequeued = Dequeue(wrapper); 
-                printf("Peeked %d", dequeued); 
+                printf("Dequeued %d", dequeued); 
                 break;
             case 'p':
                 int peeked = PeekQueue(wrapper);
@@ -195,7 +199,12 @@ int RunQueueInteractiveCycle(struct QueueWrapper* wrapper)
                 break;
             case '+':
                 printf("\nEnter the integer to add to the queue: ");
-                scanf("%d", &value); 
+                scanresult = scanf("%d", &value); 
+                if(scanresult != 1)
+                {
+                    printf("Entered value is not an integer.");
+                    break; 
+                }
                 Enqueue(wrapper, value);
                 break;
             default:
