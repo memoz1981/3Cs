@@ -9,7 +9,9 @@ void PrintNode(struct Node* node);
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct SinglyLinkedList* InitializeLinkedList()
 {
-    return (struct SinglyLinkedList*)malloc(sizeof(struct SinglyLinkedList)); 
+    struct SinglyLinkedList* list = (struct SinglyLinkedList*)malloc(sizeof(struct SinglyLinkedList)); 
+    list->head = NULL; 
+    return list;
 }
 
 void FreeLinkedList(struct SinglyLinkedList* list)
@@ -59,6 +61,12 @@ int RemoveFromLinkedList(struct SinglyLinkedList* list, int value)
     if(list->head == NULL)
     {
         return -1; 
+    }
+
+    if(list->head->value == value)
+    {
+        list->head = list->head->next;
+        return 0; 
     }
 
     //otherwise traverse to end of the linked list add node there
@@ -146,8 +154,8 @@ int RunLinkedListInteractiveCycle(struct SinglyLinkedList* list)
                 break;
             case '+':
                 printf("\nEnter the integer to add to the list: ");
-                int result = scanf("%d", &value); 
-                if(result != 0)
+                result = scanf("%d", &value); 
+                if(result != 1)
                 {
                     printf("Entered text cannot be parsed to an integer\n");
                     break;
@@ -161,7 +169,7 @@ int RunLinkedListInteractiveCycle(struct SinglyLinkedList* list)
             case '-':
                 printf("\nEnter the integer to remove from the list: ");
                 int result = scanf("%d", &value); 
-                if(result != 0)
+                if(result != 1)
                 {
                     printf("Entered text cannot be parsed to an integer\n");
                     break;
@@ -174,7 +182,10 @@ int RunLinkedListInteractiveCycle(struct SinglyLinkedList* list)
                 break;
             case '0':
                 int isListEmpty = IsLinkedListEmpty(list);
-                printf("List empty flag: %d\n", isListEmpty);
+                if(isListEmpty == 0)
+                    printf("List is empty");
+                else
+                    printf("List is not empty");
                 break;
             default:
                 printf("Invalid command\n");

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "orchestrator.h"
 
-#define PROJECT_COUNT 4
+#define PROJECT_COUNT 5
 
 /*
 gcc.exe -o main.exe -w main.c orchestrator.c
@@ -86,12 +86,16 @@ struct ProjectDemo** BuildProjects()
         PROJECT_TYPE_C_SHARP, 2, "hello_world_c_sharp", "HelloWorldApp.csproj"); 
 
     projects[2] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "stack.exe", "main.c queue.c stack.c", 
+        "../2_Data_Structures/C", "stack.exe", "main.c queue.c stack.c linkedlist.c", 
         PROJECT_TYPE_C, 3, "stack_c", ""); 
     
     projects[3] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "queue.exe", "main.c queue.c stack.c", 
+        "../2_Data_Structures/C", "queue.exe", "main.c queue.c stack.c linkedlist.c", 
         PROJECT_TYPE_C, 3, "queue_c", ""); 
+    
+    projects[4] = InitializeNewProjectDemo(
+        "../2_Data_Structures/C", "linkedlist.exe", "main.c queue.c stack.c linkedlist.c", 
+        PROJECT_TYPE_C, 4, "linked_list_c", ""); 
     
     return projects;
 }
