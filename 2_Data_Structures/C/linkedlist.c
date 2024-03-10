@@ -78,7 +78,9 @@ int RemoveFromLinkedList(struct SinglyLinkedList* list, int value)
         //as the value is already specified in argument - no need to return it. 
         if(iterator->next->value == value)
         {
+            struct Node* temp = iterator->next; 
             iterator->next = iterator->next->next;
+            free(temp); 
             return 0; 
         }
 
