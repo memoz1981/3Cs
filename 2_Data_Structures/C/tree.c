@@ -5,6 +5,8 @@
 
 #define TREE_DEFAULT_VALUE 10
 
+void PrintTreeItem(struct BSTNode* item); 
+
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct BSTNode* InitializeBst(int value)
 {
@@ -76,22 +78,36 @@ int FindMaxBst(struct BSTNode* tree)
 }
 
 /* PRINT FUNCTIONS */
+//In order traversal stands for left - middle - right
 void PrintBstInOrder(struct BSTNode* tree)
 {
     if(tree == NULL)
         return; 
     
-    printf("\n{Value: %d, addres: %p}\n", tree->value, (void*)tree);
     PrintBstInOrder(tree->left);
+    PrintTreeItem(tree); 
     PrintBstInOrder(tree->right); 
 }
+
+//Pre order is when top element is visited first, followed by left and right consequtively
 void PrintBstPreOrder(struct BSTNode* tree)
 {
-    return ; 
+    if(tree == NULL)
+        return; 
+    
+    PrintTreeItem(tree); 
+    PrintBstPreOrder(tree->left);
+    PrintBstPreOrder(tree->right); 
 } 
+
 void PrintBstPostOrder(struct BSTNode* tree)
 {
-    return; 
+    if(tree == NULL)
+        return; 
+    
+    PrintBstPostOrder(tree->left);
+    PrintBstPostOrder(tree->right); 
+    PrintTreeItem(tree); 
 }
 
 /*DEMO*/
@@ -228,4 +244,10 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree, int hasTreeBeenInitializedB
         }
 
     return 0; 
+}
+
+/* "PRIVATE" methods */
+void PrintTreeItem(struct BSTNode* item)
+{
+    printf("\n{value: %d, addres: %p}\n", item->value, (void*)item);
 }
