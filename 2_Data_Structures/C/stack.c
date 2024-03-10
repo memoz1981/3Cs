@@ -1,21 +1,10 @@
 #include <stdio.h>
 #include "stack.h"
 
+struct Stack* InitializeStack(int value);
+void PrintStackItem(struct Stack* stack);
+
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
-struct Stack* InitializeStack(int value)
-{
-    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
-    if (stack == NULL) {
-        printf("Memory allocation failed\n");
-        return NULL;
-    }
-    
-    stack->value = value;
-    stack->next = NULL;
-
-    return stack; 
-}
-
 struct StackWrapper* InitializeStackWrapper()
 {
     struct StackWrapper* wrapper = (struct StackWrapper*)malloc(sizeof(struct StackWrapper));
@@ -60,12 +49,8 @@ void PushToStack(struct StackWrapper* wrapper, int value)
         return; 
     }
 
-    struct Stack* iterator = wrapper->top; 
-    
-    while(iterator->next != NULL)
-        iterator = iterator->next; 
-    
-    iterator->next = stack; 
+    stack->next = wrapper->top; 
+    wrapper->top = stack; 
 }
 
 int PopFromStack(struct StackWrapper* wrapper)
@@ -74,18 +59,10 @@ int PopFromStack(struct StackWrapper* wrapper)
         return -1; 
     
     wrapper->count--;
-    int value; 
-    struct Stack* iterator = wrapper->top; 
-    if(iterator->next == NULL)
-    {
-        value = iterator->value; 
-        wrapper->top = NULL;
-        return value; 
-    }
-    while(iterator->next->next != NULL)
-        iterator = iterator->next; 
-    value = iterator->next->value; 
-    iterator->next = NULL; 
+    int value = wrapper->top->value; 
+    struct Stack* temp =  wrapper->top;
+    wrapper->top = wrapper->top->next; 
+    free(temp); 
 
     return value; 
 }
@@ -94,12 +71,8 @@ int PeekFromStack(struct StackWrapper* wrapper)
 {
     if(wrapper->top == NULL)
         return -1; 
-
-    struct Stack* iterator = wrapper->top; 
-    while(iterator->next != NULL)
-        iterator = iterator->next; 
-    
-    return iterator->value;  
+ 
+    return wrapper->top->value; 
 }
 
 int StackSize(struct StackWrapper* wrapper)
@@ -119,14 +92,6 @@ int isStackEmpty(struct StackWrapper* wrapper)
 }
 
 /* PRINT FUNCTIONS */
-
-void PrintStackItem(struct Stack* stack)
-{
-    if(stack == NULL)
-        printf("NULL STACK"); 
-    
-    printf("{value: %d, address: %p}",  stack->value, (void*)(stack)); 
-}
 
 void PrintStack(struct StackWrapper* wrapper)
 {
@@ -211,4 +176,27 @@ int RunStackInteractiveCycle(struct StackWrapper* wrapper)
         }
 
     return result; 
+}
+
+/* "PRIVATE" METHODS */
+struct Stack* InitializeStack(int value)
+{
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+    if (stack == NULL) {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+    
+    stack->value = value;
+    stack->next = NULL;
+
+    return stack; 
+}
+
+void PrintStackItem(struct Stack* stack)
+{
+    if(stack == NULL)
+        printf("NULL STACK"); 
+    
+    printf("{value: %d, address: %p}",  stack->value, (void*)(stack)); 
 }
