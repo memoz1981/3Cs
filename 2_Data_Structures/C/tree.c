@@ -3,6 +3,8 @@
 #include <string.h>
 #include "tree.h"
 
+#define TREE_DEFAULT_VALUE 10
+
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct BSTNode* InitializeBst(int value)
 {
@@ -78,11 +80,10 @@ void PrintBstInOrder(struct BSTNode* tree)
 {
     if(tree == NULL)
         return; 
-
-    printf("%d\n", tree->value);
+    
+    printf("\n{Value: %d, addres: %p}\n", tree->value, (void*)tree);
     PrintBstInOrder(tree->left);
     PrintBstInOrder(tree->right); 
-
 }
 void PrintBstPreOrder(struct BSTNode* tree)
 {
@@ -96,17 +97,26 @@ void PrintBstPostOrder(struct BSTNode* tree)
 /*DEMO*/
 void RunBstInInteractiveMode(void)
 {
-    struct BSTNode* tree = NULL; 
-    int result; 
+    //this value will be over written when properly initializing the tree by the user...
+    struct BSTNode* tree = InitializeBst(TREE_DEFAULT_VALUE); 
+    //this flag will be set to 1 when the tree is initialized
+    int hasTreeBeenInitializedByUser = 0; 
+    
+    int result = 0; 
     do{
-        result = RunBstTreeInteractiveCycle(tree); 
+        result = RunBstTreeInteractiveCycle(tree, hasTreeBeenInitializedByUser); 
+        
+        //this is rather a latched assignment, once the tree is initialized
+        //it will always be there... (until full consumption)
+        if(result == 1)
+            hasTreeBeenInitializedByUser = 1; 
     }
     while (result != -1);
     
     FreeBst(tree); 
 }
 
-int RunBstTreeInteractiveCycle(struct BSTNode* tree)
+int RunBstTreeInteractiveCycle(struct BSTNode* tree, int hasTreeBeenInitializedByUser)
 {
     printf("\n\n\nINTERACTIVE BINARY SEARCH TREE COMMANDS:\n"); 
     printf("[c] - for clearing the screen\n");
@@ -124,30 +134,38 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree)
     int operationResult; 
     
     scanf(" %c", &command);
-    if(command != '+' && command != 'c' && command == 'e' && tree == NULL)
-    {
-        printf("First add a value to tree to initialize"); 
-        return 0; 
-    }
     // Process user input
         switch (command) {
             case 'c':
                 system("cls"); 
-                break;
+                return 0;
             case '0':
+                if(hasTreeBeenInitializedByUser == 0)
+                {
+                    printf("Please add elements to tree first...");
+                    return 0; 
+                }
                 PrintBstInOrder(tree); 
-                break;
+                return 0;
             case '1':
+                if(hasTreeBeenInitializedByUser == 0)
+                {
+                    printf("Please add elements to tree first...");
+                    return 0; 
+                }
                 PrintBstPreOrder(tree); 
-                break;
+                return 0;
             case '2':
+                if(hasTreeBeenInitializedByUser == 0)
+                {
+                    printf("Please add elements to tree first...");
+                    return 0; 
+                }
                 PrintBstPostOrder(tree); 
-                break;
+                return 0;
             case 'e':
                 return -1; 
-                break;
             case '+':
-                
                 printf("\nEnter the integer to add to the tree: ");
                 operationResult = scanf("%d", &value); 
                 if(operationResult != 1)
@@ -155,18 +173,23 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree)
                     printf("Entered text cannot be parsed to an integer\n");
                     break;
                 }
-                if(tree == NULL)
+                if(hasTreeBeenInitializedByUser == 0)
                 {
-                    tree = InitializeBst(value);
-                    break;  
+                    tree->value = value; 
+                    return 1;   
                 }
                 operationResult = InsertToBst(tree, value); 
                 if(operationResult != 0)
                 {
                     printf("Failed to add\n");
                 }
-                break;
+                return 0;
             case '-':
+                if(hasTreeBeenInitializedByUser == 0)
+                {
+                    printf("Please add elements to tree first...");
+                    return 0; 
+                }
                 printf("\nEnter the integer to remove from the list: ");
                 operationResult = scanf("%d", &value); 
                 if(operationResult != 1)
@@ -179,8 +202,13 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree)
                 {
                     printf("Failed to remove\n");
                 }
-                break;
+                return 0;
             case 's':
+                if(hasTreeBeenInitializedByUser == 0)
+                {
+                    printf("Please add elements to tree first...");
+                    return 0; 
+                }
                 printf("\nEnter the integer to search in the tree: ");
                 operationResult = scanf("%d", &value); 
                 if(operationResult != 1)
@@ -193,11 +221,11 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree)
                 {
                     printf("Failed to remove\n");
                 }
-                break;
+                return 0;
             default:
                 printf("Invalid command\n");
-                break; 
+                return 0;
         }
 
-    return result; 
+    return 0; 
 }
