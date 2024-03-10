@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "tree.h"
 
 #define TREE_DEFAULT_VALUE 10
@@ -18,7 +19,7 @@ struct BSTNode* InitializeBst(int value)
     return node; 
 }
 
-//recursive function
+//recursive function (post order traversal again)
 void FreeBst(struct BSTNode* tree)
 {
     if(tree == NULL)
@@ -64,17 +65,50 @@ int DeleteFromBst(struct BSTNode* tree, int value)
 {
     return 0; 
 } 
+
+//Pre order traversal (since we need to compare with top element to decide)
+//Returns 0 if found
 int SearchBst(struct BSTNode* tree, int value)
 {
-    return 0; 
+    if(tree == NULL)
+        return -1; 
+    
+    if(tree->value == value)
+        return 0; 
+    else if(value < tree->value)
+        return SearchBst(tree->left, value); 
+    else
+        return SearchBst(tree->right, value);
+
 }
+
+//Leftmost element - Pre-order as above
+//assuming tree is not NULL
 int FindMinBst(struct BSTNode* tree)
 {
-    return 0; 
+    int min = tree->value; 
+
+    if(tree->left != NULL)
+    {
+        int minLeft = FindMinBst(tree->left);
+        min = minLeft < min ? minLeft : min;
+    }
+
+    return min; 
 }
+
+//Rightmost element - Pre-order as above
 int FindMaxBst(struct BSTNode* tree)
 {
-    return 0; 
+    int max = tree->value; 
+    
+    if(tree->right != NULL)
+    {
+        int maxRight = FindMaxBst(tree->right);
+        max = maxRight > max ? maxRight : max;
+    }
+
+    return max; 
 }
 
 /* PRINT FUNCTIONS */
@@ -143,6 +177,8 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree, int hasTreeBeenInitializedB
     printf("[+] - to add an element to the tree\n");
     printf("[-] - to remove an element from the tree\n");
     printf("[s] - to search an element in the tree\n");
+    printf("[<] - to return the minimum element in the tree\n");
+    printf("[>] - to return the maximum element in the tree\n");
     
     char command; 
     int value; 
@@ -235,9 +271,31 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree, int hasTreeBeenInitializedB
                 operationResult = SearchBst(tree, value); 
                 if(operationResult != 0)
                 {
-                    printf("Failed to remove\n");
+                    printf("Failed to find\n");
+                }
+                else
+                {
+                    printf("Element %d found", value); 
                 }
                 return 0;
+            case '<': 
+                if(hasTreeBeenInitializedByUser == 0)
+                {
+                    printf("Please add elements to tree first...");
+                    return 0; 
+                }
+                value = FindMinBst(tree); 
+                printf("Min value is %d", value); 
+                return 0; 
+            case '>': 
+                if(hasTreeBeenInitializedByUser == 0)
+                {
+                    printf("Please add elements to tree first...");
+                    return 0; 
+                }
+                value = FindMaxBst(tree); 
+                printf("Max value is %d", value); 
+                return 0; 
             default:
                 printf("Invalid command\n");
                 return 0;
