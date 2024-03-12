@@ -27,5 +27,4 @@ Aim is to implement data structures in C and C# (and later in C++) - using diffe
 - Stack
 - Queue
 - Linked List
-- Binary Tree
-- (Optional) A Graph implementation
+- Binary Search Tree
