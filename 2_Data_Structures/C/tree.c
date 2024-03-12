@@ -6,7 +6,9 @@
 
 #define TREE_DEFAULT_VALUE 10
 
+/* Define "private" methods */
 void PrintTreeItem(struct BSTNode* item); 
+struct BSTNode* DeleteValueFromTree(struct BSTNode* root, int value); 
 
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct BSTNode* InitializeBst(int value)
@@ -63,54 +65,15 @@ int InsertToBst(struct BSTNode* tree, int value)
 
 int DeleteFromBst(struct BSTNode* tree, int value)
 {
-    if(tree == NULL)
+    if(SearchBst(tree, value) != 0)
     {
         return -1; //to signal the remove was not successful (not found)
     }
 
-    if(value < tree->value)
-        return DeleteFromBst(tree->left, value); //we use recursion here
-    
-    if(value > tree->value)
-        return DeleteFromBst(tree->right, value); //we use recursion here
-    
-    //here we can safely assume that value is equal to the root.value
+    tree = DeleteValueFromTree(tree, value); 
 
-    //if both children are NULL
-    if(tree->left == NULL && tree->right == NULL)
-    {
-        tree = NULL; //not sure if it will work as it (we need to set parent->child = NULL)
-        return 0; 
-    }
-
-    if(tree->left == NULL) //and right is not NULL
-    {
-        tree->value = tree->right->value; 
-        tree->right = tree->right->right;
-        tree->left = tree->right->left; 
-        return 0; 
-    }
-
-    if(tree->right == NULL) //and left is not NULL
-    {
-        tree->value = tree->left->value; 
-        tree->left = tree->left->left; 
-        tree->right = tree->left->right; 
-        return 0; 
-    }
-
-    //both left and right not NULL
-
-    //first find the minimum value of the right tree
-    //(could use maximum of left tree as well)
-    int nextValue = FindMinBst(tree->right); 
-
-    //set the root value as the successor value
-    tree->value = nextValue; 
-
-    //we need to remove the successor node from the right tree
-    return DeleteFromBst(tree->right, nextafter); 
-} 
+    return 0;
+}
 
 //Pre order traversal (since we need to compare with top element to decide)
 //Returns 0 if found
@@ -354,4 +317,71 @@ int RunBstTreeInteractiveCycle(struct BSTNode* tree, int hasTreeBeenInitializedB
 void PrintTreeItem(struct BSTNode* item)
 {
     printf("\n{value: %d, addres: %p}\n", item->value, (void*)item);
+}
+
+struct BSTNode* DeleteValueFromTree(struct BSTNode* root, int value)
+{
+    if(root == NULL)
+    {
+        printf("Root is null\n"); 
+        return NULL; 
+    }
+        
+    printf("Delete: %d from tree: %d\n", value, root->value); 
+    if(value < root->value)
+    {
+        printf("Delete: %d from tree: %d\n - going left", value, root->value); 
+        root->left = DeleteValueFromTree(root->left, value); 
+        return root; 
+    }
+
+    if(value > root->value)
+    {
+        printf("Delete: %d from tree: %d\n - going right", value, root->value); 
+        root->right = DeleteValueFromTree(root->right, value);
+        return root; 
+    }
+    
+    //here we can safely assume that value is equal to the root.value
+
+    //if both children are NULL
+    if(root->left == NULL && root->right == NULL)
+    {
+        printf("Delete: %d from tree: %d - both children NULL\n", value, root->value); 
+        return NULL; 
+    }
+
+    struct BSTNode* temp = root; 
+
+    if(root->left == NULL) //and right is not NULL
+    {
+        printf("Delete: %d from tree: %d - left NULL\n", value, root->value); 
+        temp->value = root->right->value; 
+        temp->right = root->right->right;
+        temp->left = root->right->left; 
+        return temp; 
+    }
+
+    if(root->right == NULL) //and left is not NULL
+    {
+        printf("Delete: %d from tree: %d - right NULL\n", value, root->value); 
+        temp->value = root->left->value; 
+        temp->right = root->left->right;
+        temp->left = root->left->left; 
+        return temp; 
+    }
+
+    //both left and right not NULL
+
+    //first find the minimum value of the right tree
+    //(could use maximum of left tree as well)
+    int nextValue = FindMinBst(root->right); 
+
+    //set the root value as the successor value
+    printf("Delete: %d from tree: %d - next value: %d\n", value, root->value, nextValue); 
+    temp->value = nextValue; 
+    
+    //we need to remove the successor node from the right tree
+    temp->right = DeleteValueFromTree(root->right, nextValue); 
+    return temp;
 }
