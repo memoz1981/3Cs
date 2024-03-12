@@ -63,7 +63,53 @@ int InsertToBst(struct BSTNode* tree, int value)
 
 int DeleteFromBst(struct BSTNode* tree, int value)
 {
-    return 0; 
+    if(tree == NULL)
+    {
+        return -1; //to signal the remove was not successful (not found)
+    }
+
+    if(value < tree->value)
+        return DeleteFromBst(tree->left, value); //we use recursion here
+    
+    if(value > tree->value)
+        return DeleteFromBst(tree->right, value); //we use recursion here
+    
+    //here we can safely assume that value is equal to the root.value
+
+    //if both children are NULL
+    if(tree->left == NULL && tree->right == NULL)
+    {
+        tree = NULL; //not sure if it will work as it (we need to set parent->child = NULL)
+        return 0; 
+    }
+
+    if(tree->left == NULL) //and right is not NULL
+    {
+        tree->value = tree->right->value; 
+        tree->right = tree->right->right;
+        tree->left = tree->right->left; 
+        return 0; 
+    }
+
+    if(tree->right == NULL) //and left is not NULL
+    {
+        tree->value = tree->left->value; 
+        tree->left = tree->left->left; 
+        tree->right = tree->left->right; 
+        return 0; 
+    }
+
+    //both left and right not NULL
+
+    //first find the minimum value of the right tree
+    //(could use maximum of left tree as well)
+    int nextValue = FindMinBst(tree->right); 
+
+    //set the root value as the successor value
+    tree->value = nextValue; 
+
+    //we need to remove the successor node from the right tree
+    return DeleteFromBst(tree->right, nextafter); 
 } 
 
 //Pre order traversal (since we need to compare with top element to decide)
