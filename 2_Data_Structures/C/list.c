@@ -4,78 +4,78 @@
 #include <math.h>
 #include "list.h"
 
-struct GenericListValue** InitializeListArray(int size);
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
-struct GenericList* InitializeGenericList()
+struct List* InitializeList(enum Type type)
 {
-    struct GenericList* list = (struct GenericList*)malloc(sizeof(struct GenericList)); 
+    /* Firt initialize the parent data type for the list */
+    struct List* list = (struct List*)malloc(sizeof(struct List)); 
     
-    list->count = 0; 
+    list->lastIndex = 0; 
     list->arraySize = DEFAULT_LIST_SIZE;
-    list->array = InitializeListArray(list->arraySize); 
-    printf("Initialized list with following details: count: %d, array size %d", 
-        list->count, list->arraySize);
-}
+    list->type = type; 
+    list->array = (void**)malloc(sizeof(void*)); 
 
-/* "PRIVATE" methods */
-struct GenericListValue** InitializeListArray(int size)
-{
-    return (struct GenericListValue**)malloc(size * sizeof(struct GenericListValue));
-}
-
-void FreeGenericList(struct GenericList* list)
-{
-    for(int i=0; i<list->count; i++)
+    for(int i = 0; i < list->arraySize; i++)
     {
-        struct GenericListValue* element = list->array[i];
-        void* value = element->value; 
-        free(value); 
-        element->value = NULL; 
+        list->array[i] = NULL; 
     }
+    
+    printf("Initialized list with following details: last index: %d, array size %d", 
+        list->lastIndex, list->arraySize);
+}
+
+void FreeList(struct List* list)
+{
+    for(int i=0; i < list->lastIndex; i++)
+    {
+        free(list->array[i]); 
+    }
+    
     free(list->array);
+    
     free(list);
 }
 
-void PrintGenericList(struct GenericList* list)
+void PrintList(struct List* list)
 {
-    printf("\nList - size: %d, count: ", list->arraySize, list->count); 
+    printf("\nList - size: %d, last index: ", list->arraySize, list->lastIndex); 
 
-    for(int i = 0; i < list->count; i++)
+    for(int i = 0; i < list->lastIndex; i++)
     {
-        struct GenericListValue* element = list->array[i]; 
-        PrintValue(element); 
+        PrintInt(list->array[i]); 
         printf(" -> ");
     }
     printf("NULL");
 }
 
-void PrintValue(struct GenericListValue* element)
+void PrintInt(void* pointer)
 {
-    printf("{value: %d, address: %p}", element, element); 
+    int number = (int)pointer; 
+    printf("{value: %d, address: %p}", number, pointer); 
 }
 
-void AddToGenericList(struct GenericList* list, void* value)
+void AddToList(struct List* list, void* value)
 {
-    int size = list->count; //initial implementation
-    list->array[size]->value = value; 
-    list->count++;
+    int index = list->lastIndex; //initial implementation
+    list->array[index] = value; 
+    list->lastIndex++;
 }
 
-void RunGenericListInInteractiveMode(void)
+void RunListInInteractiveMode(void)
 {
-    struct GenericList* list = InitializeGenericList(); 
+    struct List* list = InitializeList(_integer); 
     
     int result = 0; 
     do{
-        result = RunGenericListInteractiveCycle(list); 
-        
+        printf("\nrecursive function returned %d\n", result); 
+        result = RunListInteractiveCycle(list); 
     }
     while (result != -1);
     
-    FreeGenericList(list); 
+    FreeList(list); 
 }
 
-int RunGenericListInteractiveCycle(struct GenericList* list)
+int RunListInteractiveCycle(struct List* list)
 {
     printf("\n\n\nINTERACTIVE GENERIC LIST COMMANDS (integer based):\n"); 
     printf("[c] - for clearing the screen\n");
@@ -90,14 +90,15 @@ int RunGenericListInteractiveCycle(struct GenericList* list)
     int result = 0; 
     int operationResult; 
     
-    scanf(" %c", &command);
+    scanf(" %c\n", &command);
+    printf("received %c", command); 
     // Process user input
         switch (command) {
             case 'c':
                 system("cls"); 
                 return 0;
             case 'p':
-                PrintGenericList(list); 
+                PrintList(list); 
                 return 0;
             case 'e':
                 return -1; 
@@ -110,7 +111,7 @@ int RunGenericListInteractiveCycle(struct GenericList* list)
                     break;
                 }
                 int* value = (int)malloc(sizeof(int)); 
-                AddToGenericList(list, value); 
+                AddToList(list, value); 
                 return 0;
             case '-':
                 return 0;

@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     }
     else if(isListCalled == 0)
     {
-        RunGenericListInInteractiveMode(); 
+        RunListInInteractiveMode(); 
     }
     else
     {

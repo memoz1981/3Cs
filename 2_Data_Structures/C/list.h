@@ -3,27 +3,28 @@
 #include <string.h>
 #include <math.h>
 
-/*Normally this value is higher, assigned 4 for easy testability */
+/* Normally this value is higher, assigned 4 for easy testability */
 #define DEFAULT_LIST_SIZE 4 
 
-typedef struct GenericList
+enum Type
 {
-    int count; 
-    int arraySize; 
-    struct GenericListValue** array; 
+    _integer, _float, _string, _char
+}; 
+
+typedef struct List
+{
+    int lastIndex; 
+    size_t arraySize; 
+    void** array; 
+    enum Type type; 
 };
 
-typedef struct GenericListValue
-{
-    void* value; 
-};
+struct List* InitializeList(enum Type type); 
 
-struct GenericList* InitializeGenericList(); 
+void FreeList(struct List* list); 
 
-void AddToGenericList(struct GenericList* list, void* value); 
+void AddToList(struct List* list, void* value); 
 
-void PrintGenericList(struct GenericList* list); 
+void PrintList(struct List* list); 
 
-void FreeGenericList(struct GenericList* list); 
-
-void RunGenericListInInteractiveMode(void);
+void RunListInInteractiveMode(void);
