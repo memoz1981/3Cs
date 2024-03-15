@@ -28,3 +28,5 @@ void AddToList(struct List* list, void* value);
 void PrintList(struct List* list); 
 
 void RunListInInteractiveMode(void);
+
+int RemoveAtIndex(int index); 
