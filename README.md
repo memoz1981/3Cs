@@ -28,3 +28,8 @@ Aim is to implement data structures in C and C# (and later in C++) - using diffe
 - Queue
 - Linked List
 - Binary Search Tree
+- Generic List (implemented for integer, float, string and char types)
+Note: For List - it was possible to make it generic by defining methods that should be 
+implemented by the corresponding type. This should be optimized in future accordingly. 
+- HashSet
+- Dictionary
