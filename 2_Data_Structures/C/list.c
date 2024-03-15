@@ -13,6 +13,7 @@ void PrintChar(void* pointer, int index);
 enum Type ReturnTypeForChar(char tp);
 void AddElement(struct List* list, char* dataTypeName);
 char* ReturnDataTypeName(enum Type type);
+void RemoveElement(struct List* list); 
 
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct List* InitializeList(enum Type type)
@@ -24,6 +25,10 @@ struct List* InitializeList(enum Type type)
     list->arraySize = DEFAULT_LIST_SIZE;
     list->type = type; 
     list->array = (void**)malloc(list->arraySize * sizeof(void*)); 
+
+    //assign NULL to all elements
+    for(int i = 0; i < list->arraySize; i++)
+        list->array[i] = NULL; 
     
     printf("\nInitialized - last index: %d, array size: %d, type : %d", 
         list->lastIndex, list->arraySize, list->type);
@@ -170,12 +175,43 @@ enum Type ReturnTypeForChar(char tp)
         exit(-1); 
 }
 
+int RemoveFromListAtIndex(struct List* list, int index)
+{
+    if(index >= list->lastIndex)
+    {
+        printf("Index out of bounds.");
+        return -1; 
+    }
+
+    //assign index to a temp pointer
+    void* temp = list->array[index];
+
+    //move all elements from index till list.last index 1 index back
+    for(int i = index; i < list->lastIndex - 1; i++)
+    {
+        list->array[i] = list->array[i + 1]; 
+    }
+    list->array[list->lastIndex - 1] = NULL; 
+
+    //decrement list last index
+    list->lastIndex--; 
+
+    //free removed element and return
+    free(temp); 
+
+    return 0; 
+}
+
 
 /* "PRIVATE" methods */
 void ResizeListArrayAndCopyElements(struct List* list)
 {
     //define new array as twice the size of current list
     void** resizedArray = (void**)malloc(list->arraySize * 2 * sizeof(void*)); 
+
+    //assign NULL to all elements
+    for(int i = 0; i < list->arraySize * 2; i++)
+        resizedArray[i] = NULL; 
 
     //copy all list elements to the new array
     for(int i = 0; i < list->lastIndex; i++)
@@ -202,7 +238,6 @@ int RunListInteractiveCycle(struct List* list, char* dataTypeName)
     printf("[e] - to exit\n");
     printf("[+] - to add an element to the list\n");
     printf("[-] - to remove an element from the list\n");
-    printf("[s] - to search an element in the list\n");
     
     char commandText[10];
     memset(commandText,'\0', 10);  
@@ -226,6 +261,7 @@ int RunListInteractiveCycle(struct List* list, char* dataTypeName)
                 AddElement(list, dataTypeName); 
                 return 0;
             case '-':
+                RemoveElement(list); 
                 return 0;
             case 's':
                 return 0;
@@ -282,4 +318,20 @@ void AddElement(struct List* list, char* dataTypeName)
     
     else
         exit(EXIT_FAILURE); 
+}
+
+void RemoveElement(struct List* list)
+{
+    printf("\nEnter the index to remove: "); 
+    int index; 
+
+    int result = scanf("%d", &index); 
+
+    if(result != 1)
+        exit(EXIT_FAILURE); 
+    
+    int removeResult = RemoveFromListAtIndex(list, index); 
+
+    if(removeResult != 0)
+        printf("Remove failed...\n"); 
 }

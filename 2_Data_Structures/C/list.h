@@ -29,4 +29,4 @@ void PrintList(struct List* list);
 
 void RunListInInteractiveMode(void);
 
-int RemoveAtIndex(int index); 
+int RemoveFromListAtIndex(struct List* list, int index); 
