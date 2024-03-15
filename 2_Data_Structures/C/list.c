@@ -96,7 +96,7 @@ void PrintFloat(void* pointer, int index)
 void PrintString(void* pointer, int index)
 {
     char* strPtr = (char*)pointer; 
-    printf("{value: %s, index: %d, address: %p}", *strPtr, index, pointer); 
+    printf("{value: %s, index: %d, address: %p}", strPtr, index, pointer); 
 }
 
 void PrintChar(void* pointer, int index)
@@ -266,15 +266,17 @@ void AddElement(struct List* list, char* dataTypeName)
         int result = scanf("%9s", ptr);
         if(result != 1)
             exit(-1); 
+        printf("Adding element %s to the list", ptr); 
         AddToList(list, ptr); 
     }
 
-    else if(list->type == _string)
+    else if(list->type == _char)
     {
         char* ptr = (char*)malloc(sizeof(char)); 
         int result = scanf("%c", ptr);
         if(result != 1)
             exit(-1); 
+        
         AddToList(list, ptr); 
     }
     
