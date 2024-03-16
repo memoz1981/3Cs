@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "orchestrator.h"
 
-#define PROJECT_COUNT 7
+#define PROJECT_COUNT 8
 
 /*
 gcc.exe -o main.exe -w main.c orchestrator.c
@@ -86,24 +86,28 @@ struct ProjectDemo** BuildProjects()
         PROJECT_TYPE_C_SHARP, 2, "hello_world_c_sharp", "HelloWorldApp.csproj"); 
 
     projects[2] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "stack.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c", 
+        "../2_Data_Structures/C", "stack.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
         PROJECT_TYPE_C, 3, "stack_c", ""); 
     
     projects[3] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "queue.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c", 
-        PROJECT_TYPE_C, 3, "queue_c", ""); 
+        "../2_Data_Structures/C", "queue.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
+        PROJECT_TYPE_C, 4, "queue_c", ""); 
     
     projects[4] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "linkedlist.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c", 
-        PROJECT_TYPE_C, 4, "linked_list_c", ""); 
+        "../2_Data_Structures/C", "linkedlist.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
+        PROJECT_TYPE_C, 5, "linked_list_c", ""); 
     
     projects[5] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "tree.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c", 
-        PROJECT_TYPE_C, 4, "binary_seach_tree_c", ""); 
+        "../2_Data_Structures/C", "tree.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
+        PROJECT_TYPE_C, 6, "binary_seach_tree_c", ""); 
     
     projects[6] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "list.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c", 
-        PROJECT_TYPE_C, 4, "list_c", ""); 
+        "../2_Data_Structures/C", "list.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
+        PROJECT_TYPE_C, 7, "list_c", ""); 
+
+    projects[7] = InitializeNewProjectDemo(
+        "../2_Data_Structures/C", "hashset.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
+        PROJECT_TYPE_C, 8, "hashset_c", ""); 
     
     return projects;
 }

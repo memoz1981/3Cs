@@ -5,6 +5,7 @@
 #include "linkedlist.h"
 #include "tree.h"
 #include "list.h"
+#include "hashset.h"
 
 /*
 gcc.exe -o 2_data_structures.exe -w main.c queue.c stack.c -> -w will hide the warning messages...
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
     int isLinkedListCalled = strcmp(argv[0], "linkedlist.exe"); 
     int isBinarySearchTreeCalled = strcmp(argv[0], "tree.exe"); 
     int isListCalled = strcmp(argv[0], "list.exe"); 
+    int isHashSetCalled = strcmp(argv[0], "hashset.exe"); 
     
     if(isStackCalled == 0)
     {
@@ -40,6 +42,10 @@ int main(int argc, char *argv[])
     else if(isListCalled == 0)
     {
         RunListInInteractiveMode(); 
+    }
+    else if(isHashSetCalled == 0)
+    {
+        RunHashSetInInteractiveMode(); 
     }
     else
     {
