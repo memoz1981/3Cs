@@ -129,7 +129,7 @@ void PrintHashSet(struct HashSetNode** hashSet)
     {
         if(hashSet[i] == NULL)
             continue; 
-        printf("\n"); 
+        printf("\nindex %d: ", i); 
         struct HashSetNode* temp = hashSet[i]; 
 
         while(temp != NULL)
@@ -276,7 +276,7 @@ int ScanElement(void)
 {
     printf("Enter the integer:"); 
     int value; 
-    int result = scanf("%d", value);
+    int result = scanf("%d", &value);
 
     if(result != 1)
     {
