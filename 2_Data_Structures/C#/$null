@@ -1,0 +1,10 @@
+MSBuild version 17.7.4+3ebbd7c49 for .NET
+  Determining projects to restore...
+  Restored D:\0. Git\3Cs\2_Data_Structures\C#\DataStructures.csproj (in 72 ms).
+  DataStructures -> D:\0. Git\3Cs\2_Data_Structures\C#\bin\Debug\net7.0\DataStructures.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.57

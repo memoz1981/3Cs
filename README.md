@@ -32,3 +32,4 @@ Aim is to implement data structures in C and C# (and later in C++) - using diffe
 Note: For List - it was possible to make it generic by defining methods that should be 
 implemented by the corresponding type. This should be optimized in future accordingly. 
 - HashSet (integer implementation)
+
