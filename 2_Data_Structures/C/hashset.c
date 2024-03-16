@@ -6,21 +6,29 @@ int Hash(int key);
 struct HashSetNode* InitializeHashSetNode(int value); 
 PrintHashSetNode(struct HashSetNode* node); 
 int RunHashSetInteractiveCycle(struct HashSetNode** hashSet);
-void AddElement(struct HashSetNode** hashSet); 
-void RemoveElement(struct HashSetNode** hashSet); 
-void SearchElement(struct HashSetNode** hashSet); 
+void ScanAndAddNewElementToTheHashSet(struct HashSetNode** hashSet); 
+void ScanAndRemoveAnElementFromTheHashSet(struct HashSetNode** hashSet); 
+void ScanAndSearchAnElementInTheHashSet(struct HashSetNode** hashSet); 
 int ScanElement(void); 
 
 /* INITIALIZATION AND FREE MEMORY FUNCTIONS*/
 struct HashSetNode** InitializeHashSet()
 {
-    struct HashSetNode* HashSet[ARRAY_SIZE_PRIME] = 
-                (struct HashSetNode*)malloc(ARRAY_SIZE_PRIME * sizeof(struct HashSetNode));
+    struct HashSetNode** HashSet = 
+               (struct HashSetNode**)malloc(ARRAY_SIZE_PRIME * sizeof(struct HashSetNode*));
+    
+    if(HashSet == NULL)
+    {
+        printf("Error during hash set initialization.");
+        exit(EXIT_FAILURE);  
+    }
     
     for(int i = 0; i < ARRAY_SIZE_PRIME; i++)
     {
         HashSet[i] = NULL; 
     }
+
+    return HashSet; 
 }
 
 void FreeHashSet(struct HashSetNode** hashSet)
@@ -87,7 +95,7 @@ int AddToHashSet(struct HashSetNode** hashSet, int key)
 
 int RemoveFromHashSet(struct HashSetNode** hashSet, int key)
 {
-    int doesContain = Contains(hashSet, key); 
+    int doesContain = HashSetContains(hashSet, key); 
 
     if(doesContain != 0)
         return -1; 
@@ -199,13 +207,13 @@ int RunHashSetInteractiveCycle(struct HashSetNode** hashSet)
             case 'e':
                 return -1; 
             case '+':
-                AddElement(hashSet); 
+                ScanAndAddNewElementToTheHashSet(hashSet); 
                 return 0;
             case '-':
-                RemoveElement(hashSet); 
+                ScanAndRemoveAnElementFromTheHashSet(hashSet); 
                 return 0;
             case '?':
-                SearchElement(hashSet);
+                ScanAndSearchAnElementInTheHashSet(hashSet);
             default:
                 printf("Invalid command\n");
                 return 0;
@@ -214,7 +222,7 @@ int RunHashSetInteractiveCycle(struct HashSetNode** hashSet)
     return 0; 
 }
 
-void AddElement(struct HashSetNode** hashSet)
+void ScanAndAddNewElementToTheHashSet(struct HashSetNode** hashSet)
 {
     int value = ScanElement(); 
 
@@ -231,7 +239,8 @@ void AddElement(struct HashSetNode** hashSet)
     if(result != 0)
         printf("Failed to add...\n"); 
 }
-void RemoveElement(struct HashSetNode** hashSet)
+
+void ScanAndRemoveAnElementFromTheHashSet(struct HashSetNode** hashSet)
 {
     int value = ScanElement(); 
 
@@ -248,7 +257,8 @@ void RemoveElement(struct HashSetNode** hashSet)
     if(result != 0)
         printf("Failed to remove...\n"); 
 }
-void SearchElement(struct HashSetNode** hashSet)
+
+void ScanAndSearchAnElementInTheHashSet(struct HashSetNode** hashSet)
 {
     int value = ScanElement(); 
 
