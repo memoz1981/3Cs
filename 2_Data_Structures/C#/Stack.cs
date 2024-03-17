@@ -3,21 +3,21 @@ using System.Text;
 
 namespace DataStructures.Stacks; 
 
-public class Stack<T>
+public class Stack<T> where T: struct
 {
-    public Stack(T value, Stack next = null)
+    public Stack(T value, Stack<T> next = null)
     {
         Value = value; 
-        next = next; 
+        this.next = next; 
     }
 
     public T Value { get; set; }
-    public Stack next { get; set; }
+    public Stack<T> next { get; set; }
 
-    public override ToString() => $"{ value }";
+    public override string ToString() => $"{Value}";
 }
 
-public class StackWrapper<T>
+public class StackWrapper<T> where T: struct
 {
     public StackWrapper()
     {
@@ -30,28 +30,28 @@ public class StackWrapper<T>
 
     public void Push(T value)
     {
-        var stack = new Stack(value, Top); 
+        var stack = new Stack<T>(value, Top); 
         Top = stack; 
         _count++; 
     } 
 
-    public T Pop()
+    public T? Pop()
     {
         var top = Top; 
 
         Top = top?.next; 
         _count--;
-        return top; 
+        return top?.Value; 
     }
 
-    public T Peek() => Top; 
+    public T? Peek() => Top?.Value; 
 
     public int Size { get => _count; }
 
     public bool IsEmpty { get => _count == 0; }
 
     
-    public override ToString()
+    public override string ToString()
     {
         var builder = new StringBuilder(); 
         builder.AppendLine("Stack: "); 
@@ -61,12 +61,17 @@ public class StackWrapper<T>
             builder.Append($"{temp.ToString()} -> ");
         }
         builder.Append("NULL"); 
-    }
 
+        return builder.ToString(); 
+    }
+}
+
+public class StackRunner
+{
     public void RunStackInInteractiveMode()
     {
         Console.Clear(); 
-        printf("\n\n\nINTERACTIVE STACK COMMANDS:\n"); 
+        Console.WriteLine("\n\n\nINTERACTIVE STACK COMMANDS:\n"); 
         Console.WriteLine("[c] - for clearing the screen\n");
         Console.WriteLine("[r] - to print the stack\n");
         Console.WriteLine("[e] - to exit\n");
@@ -74,15 +79,13 @@ public class StackWrapper<T>
         Console.WriteLine("[-] - to pop\n");
         Console.WriteLine("[p] - to peek\n");
         Console.WriteLine("[s] - to print stack count\n");
-
-        char ch = Console.ReadKey().KeyChar; 
-
         var stackWrapper = new StackWrapper<int>(); 
         int result;
         do {
+            char ch = Console.ReadKey().KeyChar; 
             result = RunStackCycle(stackWrapper, ch); 
         }
-        while(result != -1)
+        while(result != -1); 
     }
 
     private int RunStackCycle(StackWrapper<int> wrapper, char ch)
@@ -105,30 +108,35 @@ public class StackWrapper<T>
         if(ch == '+')
         {
             Console.WriteLine("Enter an integer to add to the stack: ");
-            int result = Int32.Parse(Console.Readline()); 
+            var resultStr = Console.ReadLine(); 
+            int result = Int32.Parse(resultStr); 
 
-            wrapper.Push(value); 
+            wrapper.Push(result); 
 
             return 0; 
         }
 
         if(ch == '-')
         {
-            int popped = wrapper.Pop(); 
+            var popped = wrapper.Pop(); 
 
-            Console.WriteLine($"Popped value is {popped}"); 
+            Console.WriteLine($"Popped value is {popped?.ToString() ?? "N/A"}"); 
             return 0; 
         }
 
         if(ch == 'p')
         {
-            int popped = wrapper.Peek(); 
+            var peeked = wrapper.Peek(); 
 
-            Console.WriteLine($"Peeked value is {popped}"); 
+            Console.WriteLine($"Peeked value is {peeked?.ToString() ?? "N/A"}"); 
             return 0; 
         }
 
         if(ch == 's')
+        {
             Console.WriteLine($"Stack size is {wrapper.Size}");
+            return 0; 
+        }
+        return 0;    
     }
 }
