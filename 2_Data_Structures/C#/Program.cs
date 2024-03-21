@@ -4,6 +4,7 @@ using System;
 using System.Text; 
 
 int result = 0; 
+
 while(result != -1) {
     Console.Clear();
     Console.WriteLine("\nSELECT DATA STRUCTURE TO DEBUG \n"); 
@@ -23,13 +24,11 @@ while(result != -1) {
         case 's' :
             var stackRunner = new StackRunner(); 
             stackRunner.RunStackInInteractiveMode();
-            Console.WriteLine("Exiting stack runnner..."); 
             continue;  
         
         case 'q' :
             var queueRunner = new QueueRunner(); 
             queueRunner.RunQueueInInteractiveMode();
-            Console.WriteLine("Exiting queue runnner..."); 
             continue;  
 
         case 'e': 

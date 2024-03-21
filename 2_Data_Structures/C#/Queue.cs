@@ -11,9 +11,10 @@ public class Queue<T> where T : struct
         Next = null; 
     }
 
-    public T Value { get; set; }
+    public T Value { get; }
+    public Queue<T> Next { get; private set; }
 
-    public Queue<T> Next { get; set; }
+    public void SetNext(Queue<T> next) => Next = next;
 
     public override string ToString() => $"{Value}";
 }
@@ -21,9 +22,8 @@ public class Queue<T> where T : struct
 public class QueueWrapper<T> where T : struct
 {
     private uint _count = 0; 
-    public Queue<T> Head { get; set; }
-
-    public Queue<T> Tail { get; set; }
+    public Queue<T> Head { get; private set;}
+    public Queue<T> Tail { get; private set;}
 
     public void Enqueue(T value)
     {
@@ -33,11 +33,17 @@ public class QueueWrapper<T> where T : struct
         {
             Head = queue; 
             Tail = queue; 
+            Console.WriteLine($"Head after enqueue {Head.ToString()}");
+            Console.WriteLine($"Tail after enqueue {Tail.ToString()}");
+            _count++; 
             return; 
         }
 
-        Tail.Next = queue; 
-        Tail = queue; 
+        Tail.SetNext(queue); 
+        Tail = Tail.Next; 
+        _count++; 
+        Console.WriteLine($"Head after enqueue {Head.ToString()}");
+        Console.WriteLine($"Tail after enqueue {Tail.ToString()}");
     }
 
     public T? Dequeue()
@@ -47,7 +53,7 @@ public class QueueWrapper<T> where T : struct
 
         var value = Head.Value; 
         Head = Head.Next; 
-
+        _count--; 
         return value; 
     }
 
