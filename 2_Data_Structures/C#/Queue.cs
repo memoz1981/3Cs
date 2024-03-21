@@ -27,7 +27,7 @@ public class QueueWrapper<T> where T : struct
 
     public void Enqueue(T value)
     {
-        var queue = new Queue(value); 
+        var queue = new Queue<T>(value); 
         
         if(IsEmpty)
         {
@@ -65,7 +65,7 @@ public class QueueWrapper<T> where T : struct
         while(temp != null)
         {
             builder.Append($"{temp.ToString()} -> ");
-            temp = temp.next; 
+            temp = temp.Next; 
         }
         builder.Append("NULL"); 
 
@@ -82,7 +82,7 @@ public class QueueRunner
         Console.Clear(); 
         do {
              
-            result = RunQueueCycle(stackWrapper); 
+            result = RunQueueCycle(wrapper); 
         }
         while(result != -1); 
     }

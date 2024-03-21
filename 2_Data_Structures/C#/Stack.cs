@@ -81,6 +81,7 @@ public class StackRunner
             result = RunStackCycle(stackWrapper); 
         }
         while(result != -1); 
+        Console.WriteLine("S - Exiting stack runner"); 
     }
 
     private int RunStackCycle(StackWrapper<int> wrapper)
