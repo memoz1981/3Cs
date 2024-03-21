@@ -1,5 +1,6 @@
 using DataStructures.Stacks; 
 using DataStructures.Queues; 
+using DataStructures.LinkedLists; 
 using System; 
 using System.Text; 
 
@@ -12,8 +13,6 @@ while(result != -1) {
     Console.WriteLine("[q] - for queue \n");
     Console.WriteLine("[l] - for linked list \n");
     Console.WriteLine("[t] - for binary search tree \n");
-    Console.WriteLine("[l] - to dequeue the queue\n");
-    Console.WriteLine("[h] - to peek\n");
     Console.WriteLine("[e] - exit \n");
 
     char key = Console.ReadKey().KeyChar;
@@ -29,6 +28,11 @@ while(result != -1) {
         case 'q' :
             var queueRunner = new QueueRunner(); 
             queueRunner.RunQueueInInteractiveMode();
+            continue;  
+        
+        case 'l' :
+            var listRunner = new LinkedListRunner(); 
+            listRunner.RunLinkedListInInteractiveMode(); 
             continue;  
 
         case 'e': 

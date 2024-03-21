@@ -1,26 +1,44 @@
+using System; 
+using System.Text; 
+
 namespace DataStructures.LinkedLists; 
 
 public class Node<T> where T : struct   
 {
-    public LinkedList(T value) => Value = value; 
+    public Node(T value) => Value = value; 
     public T Value { get; private set; }
     public Node<T> Next { get; private set; }
     public void SetNext(Node<T> next) => Next = next; 
-    public override ToString() => $"{Value}"
+    public override string ToString() => $"{Value}";
 }
 
 //For simplicity assuming linked list will contain unique elements only... 
 public class LinkedList<T> where T : struct
 {
-    public Node<T> Head { get; private set;}
+    public Node<T> Head { get; private set;} 
     
     public bool Contains(T value, out Node<T> last)
     {
-        last = Head; 
-        while(last != null)
+        last = null; 
+
+        if(Head == null)
+            return false; 
+
+        if(Head.Value.Equals(value))
         {
-            if(last.Value == value)
-                return true; 
+            Console.WriteLine($"Head value {Head.Value} equals value {value}"); 
+            return true; 
+        }
+
+        last = Head;
+
+        while(last.Next != null)
+        {
+            if(last.Next.Value.Equals(value))
+            {
+                Console.WriteLine($"Last next value {last.Next.Value} equals value {value}");
+                return true;  
+            }
             
             last = last.Next; 
         }
@@ -31,29 +49,32 @@ public class LinkedList<T> where T : struct
     {
         if(Contains(value, out var last))
             return false; 
+
+        if(last == null)
+        {
+            Head = new Node<T>(value); 
+            return true; 
+        }
         
-        last.SetNext(new Node(value));  
+        last.SetNext(new Node<T>(value));  
+        return true; 
     }
 
     public bool Remove(T value)
     {
-        if(Head.Value == value)
+        if(!Contains(value, out var last))
         {
-            Head = null; 
+            return false; 
+        }
+
+        if(last == null)
+        {
+            Head = Head.Next; 
             return true; 
         }
 
-        var temp = Head; 
-        while(temp.Next != null)
-        {
-            if(temp.Next.Value == value)
-            {
-                temp.SetNext(temp.Next.Next); 
-                return true; 
-            }
-            temp = temp.Next; 
-        }
-        return false;
+        last.SetNext(last.Next.Next); 
+        return true; 
     }
 
     public bool IsEmpty() => Head != null; 
@@ -149,7 +170,7 @@ public class LinkedListRunner
             var resultStr = Console.ReadLine().ToString(); 
             int result = Int32.Parse(resultStr); 
 
-            var checkResult = list.Contains(result); 
+            var checkResult = list.Contains(result, out _); 
 
             if(checkResult)
                 Console.WriteLine($"\nList contains {result}.\n"); 
