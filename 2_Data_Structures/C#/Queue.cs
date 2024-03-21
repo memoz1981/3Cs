@@ -33,8 +33,6 @@ public class QueueWrapper<T> where T : struct
         {
             Head = queue; 
             Tail = queue; 
-            Console.WriteLine($"Head after enqueue {Head.ToString()}");
-            Console.WriteLine($"Tail after enqueue {Tail.ToString()}");
             _count++; 
             return; 
         }
@@ -42,8 +40,6 @@ public class QueueWrapper<T> where T : struct
         Tail.SetNext(queue); 
         Tail = Tail.Next; 
         _count++; 
-        Console.WriteLine($"Head after enqueue {Head.ToString()}");
-        Console.WriteLine($"Tail after enqueue {Tail.ToString()}");
     }
 
     public T? Dequeue()
