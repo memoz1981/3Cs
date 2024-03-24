@@ -156,6 +156,7 @@ void PrintBstPostOrder(struct BSTNode* tree)
 /*DEMO*/
 void RunBstInInteractiveMode(void)
 {
+    system("cls"); 
     //this value will be over written when properly initializing the tree by the user...
     struct BSTNode* tree = InitializeBst(TREE_DEFAULT_VALUE); 
     //this flag will be set to 1 when the tree is initialized

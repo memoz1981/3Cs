@@ -114,7 +114,7 @@ void PrintStack(struct StackWrapper* wrapper)
 /* STACK DEMO */
 void RunStackInInteractiveMode(void)
 {
-    printf("running interactive"); 
+    system("cls"); 
     struct StackWrapper* wrapper = InitializeStackWrapper(); 
     int result; 
     do{

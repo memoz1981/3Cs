@@ -103,39 +103,19 @@ struct ProjectDemo** BuildProjects()
     
     projects[0] = InitializeNewProjectDemo(
         "../1_Hello_World/C", "hello_world.exe", "main.c", 
-        PROJECT_TYPE_C, 1, "hello_world_c", ""); 
+        PROJECT_TYPE_C, 1, "Hello World (C)", ""); 
     
     projects[1] = InitializeNewProjectDemo(
         "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", 
-        PROJECT_TYPE_C_SHARP, 2, "hello_world_c_sharp", "HelloWorldApp.csproj"); 
+        PROJECT_TYPE_C_SHARP, 2, "Hello World (C#)", "HelloWorldApp.csproj"); 
 
     projects[2] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "stack.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-        PROJECT_TYPE_C, 3, "stack_c", ""); 
-    
+        "../2_Data_Structures/C", "datastructures.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
+        PROJECT_TYPE_C, 3, "Data Structures (C)", ""); 
+        
     projects[3] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "queue.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-        PROJECT_TYPE_C, 4, "queue_c", ""); 
-    
-    projects[4] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "linkedlist.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-        PROJECT_TYPE_C, 5, "linked_list_c", ""); 
-    
-    projects[5] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "tree.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-        PROJECT_TYPE_C, 6, "binary_seach_tree_c", ""); 
-    
-    projects[6] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "list.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-        PROJECT_TYPE_C, 7, "list_c", ""); 
-
-    projects[7] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "hashset.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-        PROJECT_TYPE_C, 8, "hashset_c", ""); 
-    
-    projects[8] = InitializeNewProjectDemo(
         "../2_Data_Structures/C#", NULL, "DataStructures.csproj", 
-        PROJECT_TYPE_C_SHARP, 9, "data_structures_c_sharp", "DataStructures.csproj"); 
+        PROJECT_TYPE_C_SHARP, 4, "Data Structures (C#)", "DataStructures.csproj"); 
     
     return projects;
 }
