@@ -14,42 +14,67 @@ gcc.exe -o 2_data_structures.exe -w main.c queue.c stack.c -> -w will hide the w
 
 int main(int argc, char *argv[])
 {
-    int arg = 1; 
+    system("cls"); 
+    int result; 
+    do
+    {
+        result = RunDataStructuresDemo(); 
+    } while (result != -1);
 
-    int isStackCalled = strcmp(argv[0], "stack.exe"); 
-    int isQueueCalled = strcmp(argv[0], "queue.exe"); 
-    int isLinkedListCalled = strcmp(argv[0], "linkedlist.exe"); 
-    int isBinarySearchTreeCalled = strcmp(argv[0], "tree.exe"); 
-    int isListCalled = strcmp(argv[0], "list.exe"); 
-    int isHashSetCalled = strcmp(argv[0], "hashset.exe"); 
-    
-    if(isStackCalled == 0)
+    return 0; 
+}
+
+int RunDataStructuresDemo()
+{
+    printf("\n\n\nDATA STRUCTURES C DEMO:\n"); 
+    printf("[c] - to clear the screen\n");
+    printf("[s] - for stack demo\n");
+    printf("[q] - for queue demo\n");
+    printf("[l] - for linked list demo\n");
+    printf("[t] - for binary search tree demo\n");
+    printf("[i] - for list demo\n");
+    printf("[h] - for hashset demo\n");
+    printf("[e] - to exit to the upper menu\n");
+
+    char command[5]; 
+    scanf("%s", command);
+
+    if(strcmp(command, "c") == 0)
+    {
+        system("cls"); 
+    }
+    else if(strcmp(command, "s") == 0)
     {
         RunStackInInteractiveMode(); 
     }
-    else if(isQueueCalled == 0)
+    else if(strcmp(command, "q") == 0)
     {
         RunQueueInInteractiveMode(); 
     }
-    else if(isLinkedListCalled == 0)
+    else if(strcmp(command, "l") == 0)
     {
         RunLinkedListInInteractiveMode(); 
     }
-    else if(isBinarySearchTreeCalled == 0)
+    else if(strcmp(command, "t") == 0)
     {
         RunBstInInteractiveMode(); 
     }
-    else if(isListCalled == 0)
+    else if(strcmp(command, "i") == 0)
     {
         RunListInInteractiveMode(); 
     }
-    else if(isHashSetCalled == 0)
+    else if(strcmp(command, "h") == 0)
     {
         RunHashSetInInteractiveMode(); 
     }
-    else
+    else if(strcmp(command, "e") == 0)
     {
         return -1; 
+    }
+    else
+    {
+        printf("Invalid command...");
+        return 0; 
     }
 }
 

@@ -146,6 +146,7 @@ void PrintFullQueue(struct QueueWrapper* wrapper)
 /* QUEUE DEMO */
 void RunQueueInInteractiveMode(void)
 {
+    system("cls"); 
     struct QueueWrapper* wrapper = InitializeQueueWrapper(); 
     int result; 
     do{

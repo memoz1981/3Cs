@@ -117,6 +117,7 @@ void PrintLinkedList(struct SinglyLinkedList* list)
 /*DEMO*/
 void RunLinkedListInInteractiveMode(void)
 {
+    system("cls"); 
     struct SinglyLinkedList* list = InitializeLinkedList(); 
     int result; 
     do{
