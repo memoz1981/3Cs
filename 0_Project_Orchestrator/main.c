@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "orchestrator.h"
 
-#define PROJECT_COUNT 8
+#define PROJECT_COUNT 50
 
 /*
 gcc.exe -o main.exe -w main.c orchestrator.c
@@ -21,7 +21,12 @@ int main()
     } while (result != -1);
     
     for(int i =0; i < PROJECT_COUNT; i++)
-       free(projects[i]); 
+    {
+        if(projects[i] == NULL)
+            continue; 
+        
+        free(projects[i]); 
+    }
 
     return 0; 
 }
@@ -32,9 +37,12 @@ int Orchestrate(struct ProjectDemo** projects)
     printf("[0] - To clear the screen.\n"); 
     for(int i = 1; i <= PROJECT_COUNT ; i++)
     {
+        if(projects[i-1] == NULL)
+            continue; 
+
         printf("[%d] - To run project demo %s\n", i, projects[i-1]->project_name); 
     }
-    printf("-1 to exit.\n"); 
+    printf("[-1] to exit.\n"); 
     
     int result; 
     int scanResult = scanf("%d", &result); 
@@ -44,38 +52,54 @@ int Orchestrate(struct ProjectDemo** projects)
         return -1; 
     }
 
-    if(result >= 1 && result <= PROJECT_COUNT)
+    result--; 
+    if(result >= 0 && result < PROJECT_COUNT && projects[result] != NULL)
     {
         printf("\n\n\n*************PROJECT DEMO OUTPUT*************\n\n\n"); 
-        Project_Demo_To_String(projects[result-1]); 
+        Project_Demo_To_String(projects[result]); 
         
-        if(Build(projects[result-1]))
+        if(Build(projects[result]))
         {
             printf("Failed to build...\n"); 
         }
 
-        if(Run(projects[result-1]))
+        if(Run(projects[result]))
         {
             printf("Failed to run...\n"); 
         }
         printf("\n\n\n***********END OF PROJECT DEMO OUTPUT***********\n\n\n"); 
         return 0; 
     }
-    else if(result == 0)
+    else if(result == -1)
     {
         system("cls");
+        return 0; 
     }
-    else if(result == -1)
-        return result; 
+    else if(result == -2)
+    {
+        return -1; 
+    }
+        
     else
         printf("Invalid selection..."); 
     
-    return result; 
+    return 0; 
 }
 
 struct ProjectDemo** BuildProjects()
 {
     struct ProjectDemo** projects = (struct ProjectDemo**)malloc(PROJECT_COUNT * sizeof(struct ProjectDemo*)); 
+    
+    if(projects == NULL)
+    {
+        printf("Error during memory assignment for ProjectDemo type.");
+        exit(EXIT_FAILURE); 
+    }
+
+    for(int i = 0; i < PROJECT_COUNT; i++)
+    {
+        projects[i] = NULL; 
+    }
     
     projects[0] = InitializeNewProjectDemo(
         "../1_Hello_World/C", "hello_world.exe", "main.c", 
@@ -108,6 +132,10 @@ struct ProjectDemo** BuildProjects()
     projects[7] = InitializeNewProjectDemo(
         "../2_Data_Structures/C", "hashset.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
         PROJECT_TYPE_C, 8, "hashset_c", ""); 
+    
+    projects[8] = InitializeNewProjectDemo(
+        "../2_Data_Structures/C#", NULL, "DataStructures.csproj", 
+        PROJECT_TYPE_C_SHARP, 9, "data_structures_c_sharp", "DataStructures.csproj"); 
     
     return projects;
 }
