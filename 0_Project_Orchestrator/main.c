@@ -1,26 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "orchestrator.h"
+#include <unistd.h>
+#include <string.h>
+#include "op_system_commands.h"
 
-#define PROJECT_COUNT 50
+#define MAX_PROJECT_COUNT 50
 
 /*
 gcc.exe -o main.exe -w main.c orchestrator.c
 .\main.exe
 */
 
-struct ProjectDemo** BuildProjects();
+void clear_screen(void); 
+int orchestrate(struct project_demo** projects); 
+struct project_demo** build_projects();
 
 int main()
 {
     int result; 
-    struct ProjectDemo** projects = BuildProjects(); 
+    struct project_demo** projects = build_projects(); 
     do
     {
-        result = Orchestrate(projects); 
+        result = orchestrate(projects); 
     } while (result != -1);
     
-    for(int i =0; i < PROJECT_COUNT; i++)
+    for(int i =0; i < MAX_PROJECT_COUNT; i++)
     {
         if(projects[i] == NULL)
             continue; 
@@ -31,17 +36,23 @@ int main()
     return 0; 
 }
 
-int Orchestrate(struct ProjectDemo** projects)
+int orchestrate(struct project_demo** projects)
 {
     printf("\nSelect project demo to run as below:\n");
     printf("[0] - To clear the screen.\n"); 
-    for(int i = 1; i <= PROJECT_COUNT ; i++)
+    
+    char *current_directory = (char*)malloc(MAX_PATH_LENGTH * sizeof(char));
+    *current_directory = '\0'; 
+    getcwd(current_directory, MAX_PATH_LENGTH); 
+    
+    for(int i = 1; i <= MAX_PROJECT_COUNT ; i++)
     {
         if(projects[i-1] == NULL)
             continue; 
 
         printf("[%d] - To run project demo %s\n", i, projects[i-1]->project_name); 
     }
+
     printf("[-1] to exit.\n"); 
     
     int result; 
@@ -51,29 +62,30 @@ int Orchestrate(struct ProjectDemo** projects)
         printf("Invalid selection...\n"); 
         return -1; 
     }
+    
 
     result--; 
-    if(result >= 0 && result < PROJECT_COUNT && projects[result] != NULL)
+    if(result >= 0 && result < MAX_PROJECT_COUNT && projects[result] != NULL)
     {
         printf("\n\n\n*************PROJECT DEMO OUTPUT*************\n\n\n"); 
-        Project_Demo_To_String(projects[result]); 
+        chdir(projects[result]->relative_path); 
         
-        if(Build(projects[result]))
+        if(build_project(projects[result]))
         {
             printf("Failed to build...\n"); 
         }
 
-        if(Run(projects[result]))
+        if(run_project(projects[result]))
         {
             printf("Failed to run...\n"); 
         }
         printf("\n\n\n***********END OF PROJECT DEMO OUTPUT***********\n\n\n"); 
+        chdir(current_directory); 
+        
         return 0; 
     }
     else if(result == -1)
     {
-        system("cls");
-        return 0; 
     }
     else if(result == -2)
     {
@@ -86,36 +98,48 @@ int Orchestrate(struct ProjectDemo** projects)
     return 0; 
 }
 
-struct ProjectDemo** BuildProjects()
+void clear_screen(void)
 {
-    struct ProjectDemo** projects = (struct ProjectDemo**)malloc(PROJECT_COUNT * sizeof(struct ProjectDemo*)); 
+        char clear_screen_command[10] = {0};
+        strcpy(clear_screen_command, return_clear_screen_command()); 
+        system(clear_screen_command);
+        return 0; 
+}
+
+struct project_demo** build_projects()
+{
+    struct project_demo** projects = (struct project_demo**)malloc(MAX_PROJECT_COUNT * sizeof(struct project_demo*)); 
     
     if(projects == NULL)
     {
-        printf("Error during memory assignment for ProjectDemo type.");
+        printf("Error during memory assignment for project_demo type.");
         exit(EXIT_FAILURE); 
     }
 
-    for(int i = 0; i < PROJECT_COUNT; i++)
+    for(int i = 0; i < MAX_PROJECT_COUNT; i++)
     {
         projects[i] = NULL; 
     }
     
-    projects[0] = InitializeNewProjectDemo(
-        "../1_Hello_World/C", "hello_world.exe", "main.c", 
-        PROJECT_TYPE_C, 1, "Hello World (C)", ""); 
-    
-    projects[1] = InitializeNewProjectDemo(
-        "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", 
-        PROJECT_TYPE_C_SHARP, 2, "Hello World (C#)", "HelloWorldApp.csproj"); 
+    projects[0] = initialize_project(
+        "../1_Hello_World/C", PROJECT_TYPE_C, "hello_world", "Hello World (C)");
 
-    projects[2] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C", "datastructures.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-        PROJECT_TYPE_C, 3, "Data Structures (C)", ""); 
+
+    projects[1] = initialize_project(
+        "../1_Hello_World/C#", PROJECT_TYPE_C_SHARP, "hello_world", "Hello World (C#)");
+
+
+    // projects[1] = InitializeNewProjectDemo(
+    //     "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", 
+    //     PROJECT_TYPE_C_SHARP, 2, "Hello World (C#)", "HelloWorldApp.csproj"); 
+
+    // projects[2] = InitializeNewProjectDemo(
+    //     "../2_Data_Structures/C", "datastructures.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
+    //     PROJECT_TYPE_C, 3, "Data Structures (C)", ""); 
         
-    projects[3] = InitializeNewProjectDemo(
-        "../2_Data_Structures/C#", NULL, "DataStructures.csproj", 
-        PROJECT_TYPE_C_SHARP, 4, "Data Structures (C#)", "DataStructures.csproj"); 
+    // projects[3] = InitializeNewProjectDemo(
+    //     "../2_Data_Structures/C#", NULL, "DataStructures.csproj", 
+    //     PROJECT_TYPE_C_SHARP, 4, "Data Structures (C#)", "DataStructures.csproj"); 
     
     return projects;
 }

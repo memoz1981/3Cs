@@ -3,36 +3,31 @@
 #define MAX_ARGUMENT_LENGTH 64
 
 //Define the orchestrator
-enum ProjectType
+enum project_type
 {
     PROJECT_TYPE_C,
     PROJECT_TYPE_C_SHARP,
     PROJECT_TYPE_C_PLUS_PLUS
 }; 
 
-typedef struct ProjectDemo
+typedef struct project_demo
 {
-    char current_directory[MAX_PATH_LENGTH]; 
-    char relative_path[MAX_PATH_LENGTH]; 
-    char executable_name[MAX_NAME_LENGTH]; 
-    char build_arguments[MAX_ARGUMENT_LENGTH]; 
-    enum ProjectType project_type; 
-    int project_id;
-    char project_name[MAX_NAME_LENGTH]; 
-    char run_arguments[MAX_ARGUMENT_LENGTH]; 
-};
+    char* relative_path; 
+    enum project_type project_type; 
+    char* executable_name; 
+    char* project_name; 
+} project_demo;
 
-struct ProjectDemo* InitializeNewProjectDemo(
+struct project_demo* initialize_project(
     char* relative_path, 
+    enum project_type project_type,
     char* executable_name, 
-    char* build_arguments,
-    enum ProjectType project_type,
-    int project_id,
-    char* project_name,
-    char* run_arguments); 
+    char* project_name); 
 
-int Build(struct ProjectDemo* project); 
+int build_project(struct project_demo* project); 
 
-int Run(struct ProjectDemo* project); 
+int run_project(struct project_demo* project); 
 
-void Project_Demo_To_String(struct ProjectDemo* project); 
+void print_project(struct project_demo* project); 
+
+void free_project(struct project_demo* project); 
