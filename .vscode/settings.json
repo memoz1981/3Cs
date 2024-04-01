@@ -9,6 +9,7 @@
         "xmemory": "c",
         "xtr1common": "c",
         "xutility": "c",
-        "list": "c"
+        "list": "c",
+        "stdio.h": "c"
     }
 }

@@ -7,19 +7,14 @@
 
 #define MAX_PROJECT_COUNT 50
 
-/*
-gcc.exe -o main.exe -w main.c orchestrator.c
-.\main.exe
-*/
-
 void clear_screen(void); 
 int orchestrate(struct project_demo** projects); 
-struct project_demo** build_projects();
+struct project_demo** return_projects();
 
 int main()
 {
     int result; 
-    struct project_demo** projects = build_projects(); 
+    struct project_demo** projects = return_projects(); 
     do
     {
         result = orchestrate(projects); 
@@ -62,14 +57,13 @@ int orchestrate(struct project_demo** projects)
         printf("Invalid selection...\n"); 
         return -1; 
     }
-    
 
     result--; 
     if(result >= 0 && result < MAX_PROJECT_COUNT && projects[result] != NULL)
     {
         printf("\n\n\n*************PROJECT DEMO OUTPUT*************\n\n\n"); 
         chdir(projects[result]->relative_path); 
-        
+
         if(build_project(projects[result]))
         {
             printf("Failed to build...\n"); 
@@ -79,19 +73,19 @@ int orchestrate(struct project_demo** projects)
         {
             printf("Failed to run...\n"); 
         }
+
         printf("\n\n\n***********END OF PROJECT DEMO OUTPUT***********\n\n\n"); 
         chdir(current_directory); 
-        
         return 0; 
     }
     else if(result == -1)
     {
+        clear_screen(); 
     }
     else if(result == -2)
     {
         return -1; 
     }
-        
     else
         printf("Invalid selection..."); 
     
@@ -103,10 +97,9 @@ void clear_screen(void)
         char clear_screen_command[10] = {0};
         strcpy(clear_screen_command, return_clear_screen_command()); 
         system(clear_screen_command);
-        return 0; 
 }
 
-struct project_demo** build_projects()
+struct project_demo** return_projects()
 {
     struct project_demo** projects = (struct project_demo**)malloc(MAX_PROJECT_COUNT * sizeof(struct project_demo*)); 
     
@@ -122,25 +115,16 @@ struct project_demo** build_projects()
     }
     
     projects[0] = initialize_project(
-        "../1_Hello_World/C", PROJECT_TYPE_C, "hello_world", "Hello World (C)");
-
+        "../1_Hello_World/C/", PROJECT_TYPE_C, "hello_world", "Hello World (C)");
 
     projects[1] = initialize_project(
-        "../1_Hello_World/C#", PROJECT_TYPE_C_SHARP, "hello_world", "Hello World (C#)");
+        "../1_Hello_World/C#/", PROJECT_TYPE_C_SHARP, "HelloWorldApp.csproj", "Hello World (C#)");
 
+    projects[2] = initialize_project(
+        "../2_Data_Structures/C", PROJECT_TYPE_C, "data_structures", "Data Structures (C)");
 
-    // projects[1] = InitializeNewProjectDemo(
-    //     "../1_Hello_World/C#", NULL, "HelloWorldApp.csproj", 
-    //     PROJECT_TYPE_C_SHARP, 2, "Hello World (C#)", "HelloWorldApp.csproj"); 
-
-    // projects[2] = InitializeNewProjectDemo(
-    //     "../2_Data_Structures/C", "datastructures.exe", "main.c queue.c stack.c linkedlist.c tree.c list.c hashset.c", 
-    //     PROJECT_TYPE_C, 3, "Data Structures (C)", ""); 
-        
-    // projects[3] = InitializeNewProjectDemo(
-    //     "../2_Data_Structures/C#", NULL, "DataStructures.csproj", 
-    //     PROJECT_TYPE_C_SHARP, 4, "Data Structures (C#)", "DataStructures.csproj"); 
+    projects[3] = initialize_project(
+        "../2_Data_Structures/C#", PROJECT_TYPE_C_SHARP, "data_structures", "Data Structures (C#)");
     
     return projects;
 }
-

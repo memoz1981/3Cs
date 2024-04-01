@@ -5,14 +5,14 @@ typedef struct Queue
 {
     int value;
     struct Queue* next;
-};
+} Queue;
 
 //Define the queue wrapper - this is required when the reference to head needs to be destructed
 typedef struct QueueWrapper
 {
     struct Queue* head;
     int size; 
-};
+} QueueWrapper;
 
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct QueueWrapper* InitializeQueueWrapper();

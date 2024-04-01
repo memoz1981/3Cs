@@ -7,6 +7,8 @@
 #include "list.h"
 #include "hashset.h"
 
+int RunDataStructuresDemo(void); 
+
 /*
 gcc.exe -o 2_data_structures.exe -w main.c queue.c stack.c -> -w will hide the warning messages...
 .\2_data_structures.exe
@@ -24,7 +26,7 @@ int main(int argc, char *argv[])
     return 0; 
 }
 
-int RunDataStructuresDemo()
+int RunDataStructuresDemo(void)
 {
     printf("\n\n\nDATA STRUCTURES C DEMO:\n"); 
     printf("[c] - to clear the screen\n");

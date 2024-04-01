@@ -3,7 +3,7 @@
 typedef struct HashSetNode {
     int value; 
     struct HashSetNode* next;
-};
+} HashSetNode;
 
 /* INITIALIZATION AND FREE MEMORY FUNCTIONS*/
 struct HashSetNode** InitializeHashSet();

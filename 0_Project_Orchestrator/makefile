@@ -7,5 +7,5 @@ else
 	endif
 endif
 
-orchestrate: main.c orchestrator.c
-	gcc -o $(EXECUTABLE) main.c orchestrator.c op_system_commands.c -I.2
+orchestrate: main.c orchestrator.c op_system_commands.c
+	gcc -o $(EXECUTABLE) main.c orchestrator.c op_system_commands.c -I.2 >null

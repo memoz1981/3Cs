@@ -41,20 +41,17 @@ struct project_demo* initialize_project(
 
         project->project_type = project_type; 
 
-        printf("Initialized project: path: %s, executable: %s, name: %s, type: %d\n",
-            project->relative_path, project->executable_name, project->project_name, project->project_type); 
-
         return project; 
     }
 
 int build_project(struct project_demo* project)
 {
-    char* command = (char*)malloc(512 * sizeof(char)); 
-    command = '\0'; 
+    char* command = (char*)malloc(64 * sizeof(char)); 
+    memset(command, '\0', 64); 
 
     switch(project->project_type) {
         case PROJECT_TYPE_C:
-            build_project_c(project, command); 
+            build_project_c(project, command);  
             break; 
         case PROJECT_TYPE_C_SHARP:
             build_project_c_sharp(project, command); 
@@ -62,8 +59,6 @@ int build_project(struct project_demo* project)
         default:
             break; 
     }
-
-    strcat(command, " >$null");
     int result = system(command); 
     free(command); 
 
@@ -72,8 +67,8 @@ int build_project(struct project_demo* project)
 
 int run_project(struct project_demo* project)
 {
-    char* command = (char*)malloc(512 * sizeof(char)); 
-    command = 0; 
+    char* command = (char*)malloc(64 * sizeof(char)); 
+    memset(command, '\0', 64); 
 
     switch(project->project_type) {
         case PROJECT_TYPE_C:
@@ -85,31 +80,30 @@ int run_project(struct project_demo* project)
         default:
             break; 
     }
-    
-    int result = system(command); 
-    
-    free(command); 
 
+    int result = system(command); 
+    free(command); 
     return result; 
 }
 
 void build_project_c(struct project_demo* project, char* command)
 {
-    strcat(command, "make"); 
+    strcat(command, "make "); 
 }
 
 void build_project_c_sharp(struct project_demo* project, char* command)
 {
-    strcat(command, "powershell.exe dotnet build "); 
+    strcat(command, "dotnet build "); 
+    strcat(command, project->executable_name); 
 }
 
 void run_project_c(struct project_demo* project, char* command)
 {
-    strcat(command, project->executable_name); 
-    strcat(command, " "); 
+    strcpy(command, return_c_project_run_command(project->executable_name)); 
 }
 
 void run_project_c_sharp(struct project_demo* project, char* command)
 {
-    strcat(command, "powershell.exe dotnet run --project "); 
+    strcat(command, "dotnet run --project "); 
+    strcat(command, project->executable_name); 
 }

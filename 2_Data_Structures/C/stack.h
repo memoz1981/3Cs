@@ -5,7 +5,7 @@ typedef struct Stack
 {
     int value;
     struct Stack* next;
-};
+} Stack;
 
 //Define the stack wrapper - since the stack top (head) element constantly changes
 //need a wrapper to keep the reference to the stack
@@ -13,7 +13,7 @@ typedef struct StackWrapper
 {
     struct Stack* top;
     int count; 
-};
+} StackWrapper;
 
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct StackWrapper* InitializeStackWrapper(void); 

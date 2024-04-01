@@ -7,7 +7,7 @@ typedef struct BSTNode
     int value;
     struct BSTNode* left;
     struct BSTNode* right;
-};
+} BSTNode;
 
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct BSTNode* InitializeBst(int value);

@@ -17,7 +17,7 @@ typedef struct List
     size_t arraySize; 
     void** array; 
     enum Type type; 
-};
+} List;
 
 struct List* InitializeList(enum Type type); 
 

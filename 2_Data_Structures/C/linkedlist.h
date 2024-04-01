@@ -5,13 +5,13 @@ typedef struct Node
 {
     int value;
     struct Node* next;
-};
+} Node;
 
 //Define the singly linked list wrapper objexct
 typedef struct SinglyLinkedList
 {
     struct Node* head;
-};
+} SinglyLinkedList;
 
 /* INITIALIZATION AND MEMORY FREE-ING FUNCTIONS */
 struct SinglyLinkedList* InitializeLinkedList();
